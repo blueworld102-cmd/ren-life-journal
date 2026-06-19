@@ -1,0 +1,121 @@
+---
+import SectionHeader from './SectionHeader.astro';
+import { projects } from '@/data/projects';
+---
+
+<section class="section projects-preview home-projects">
+	<div class="projects-preview-head">
+		<SectionHeader
+			eyebrow="Projects"
+			title="專案與計畫"
+			lead="生活紀錄之外，還有正在進行中的巡禮、創作與下一章準備。"
+		/>
+		<a href="/projects" class="btn btn-text">查看全部專案 →</a>
+	</div>
+
+	<div class="projects-grid">
+		{
+			projects.map((project) => (
+				<article class="project-card">
+					<div class="project-card-body">
+						<p class="project-status">{project.status}</p>
+						<h3 class="project-title">{project.title}</h3>
+						<p class="project-description">{project.description}</p>
+					</div>
+					<a
+						href={project.previewHref}
+						class:list={[
+							'btn',
+							project.status === '準備中' ? 'btn-secondary' : 'btn-outline',
+						]}
+						data-cursor-hover
+					>
+						{project.previewButtonLabel}
+					</a>
+				</article>
+			))
+		}
+	</div>
+</section>
+
+<style>
+	.home-projects {
+		margin-bottom: 3rem;
+	}
+
+	.projects-preview-head {
+		display: flex;
+		justify-content: space-between;
+		align-items: flex-end;
+		gap: 1rem;
+		flex-wrap: wrap;
+		margin-bottom: 1.75rem;
+	}
+
+	.projects-preview-head :global(.section-header) {
+		margin-bottom: 0;
+	}
+
+	.projects-grid {
+		display: grid;
+		grid-template-columns: repeat(3, minmax(0, 1fr));
+		gap: 1.25rem;
+	}
+
+	.project-card {
+		display: flex;
+		flex-direction: column;
+		justify-content: space-between;
+		gap: 1.25rem;
+		min-height: 100%;
+		padding: 1.35rem 1.4rem 1.4rem;
+		background: var(--color-surface);
+		border: 0.5px solid var(--color-border);
+		border-radius: var(--radius-card);
+		box-shadow: var(--shadow);
+	}
+
+	.project-card-body {
+		flex: 1;
+	}
+
+	.project-status {
+		margin: 0 0 0.55rem;
+		font-size: 0.68rem;
+		letter-spacing: 0.14em;
+		text-transform: uppercase;
+		color: var(--color-primary);
+	}
+
+	.project-title {
+		margin: 0 0 0.65rem;
+		font-family: var(--font-title);
+		font-size: 1.05rem;
+		font-weight: 600;
+		line-height: 1.4;
+		letter-spacing: 0.03em;
+	}
+
+	.project-description {
+		margin: 0;
+		font-size: 0.9rem;
+		line-height: 1.75;
+		color: var(--color-text-muted);
+	}
+
+	.project-card .btn {
+		align-self: flex-start;
+	}
+
+	@media (max-width: 900px) {
+		.projects-grid {
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+		}
+	}
+
+	@media (max-width: 560px) {
+		.projects-grid {
+			grid-template-columns: 1fr;
+		}
+	}
+</style>

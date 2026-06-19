@@ -1,0 +1,182 @@
+---
+import BaseLayout from '@/components/BaseLayout.astro';
+import Navbar from '@/components/Navbar.astro';
+import { getActiveProjectLinks, projects, projectsPageMeta } from '@/data/projects';
+import { SITE_TITLE } from '@/consts';
+
+const pageTitle = `${projectsPageMeta.title}｜${SITE_TITLE}`;
+const pageDescription = projectsPageMeta.description;
+---
+
+<BaseLayout title={pageTitle} description={pageDescription}>
+	<Navbar slot="navbar" currentPath={Astro.url.pathname} />
+
+	<header class="page-hero">
+		<p class="page-kicker">{projectsPageMeta.kicker}</p>
+		<h1 class="page-title">{projectsPageMeta.title}</h1>
+		<p class="page-lead">{projectsPageMeta.subtitle}</p>
+	</header>
+
+	<div class="projects-list">
+		{
+			projects.map((project) => {
+				const activeLinks = getActiveProjectLinks(project);
+				return (
+					<section id={project.id} class="project-section">
+						<div class="project-section-head">
+							<h2 class="project-section-title">{project.title}</h2>
+							<span class="project-badge">{project.status}</span>
+						</div>
+						<p class="project-section-description">{project.description}</p>
+						{
+							activeLinks.length > 0 && (
+								<div class="project-links">
+									<p class="project-links-label">相關連結</p>
+									<ul>
+										{activeLinks.map((link) => (
+											<li>
+												<a href={link.href} data-cursor-hover>
+													{link.label}
+												</a>
+											</li>
+										))}
+									</ul>
+								</div>
+							)
+						}
+					</section>
+				);
+			})
+		}
+	</div>
+</BaseLayout>
+
+<style>
+	.page-hero {
+		margin-bottom: 2.5rem;
+		padding-bottom: 2rem;
+		border-bottom: 1px solid var(--color-border);
+	}
+
+	.page-kicker {
+		margin: 0 0 0.75rem;
+		font-size: 0.72rem;
+		letter-spacing: 0.28em;
+		text-transform: uppercase;
+		color: var(--color-text-muted);
+	}
+
+	.page-title {
+		margin: 0 0 0.85rem;
+		font-family: var(--font-title);
+		font-size: clamp(2rem, 5vw, 2.75rem);
+		font-weight: 600;
+		line-height: 1.25;
+		letter-spacing: 0.04em;
+	}
+
+	.page-lead {
+		margin: 0;
+		max-width: 36rem;
+		color: var(--color-text-muted);
+		font-size: 1rem;
+		line-height: 1.8;
+	}
+
+	.projects-list {
+		display: grid;
+		gap: 0;
+	}
+
+	.project-section {
+		padding: 2.25rem 0;
+		border-bottom: 1px solid var(--color-border);
+		scroll-margin-top: 5.5rem;
+	}
+
+	.project-section:last-child {
+		border-bottom: none;
+		padding-bottom: 1rem;
+	}
+
+	.project-section-head {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: baseline;
+		gap: 0.75rem 1rem;
+		margin-bottom: 0.85rem;
+	}
+
+	.project-section-title {
+		margin: 0;
+		font-family: var(--font-title);
+		font-size: clamp(1.35rem, 3vw, 1.65rem);
+		font-weight: 600;
+		letter-spacing: 0.04em;
+	}
+
+	.project-badge {
+		display: inline-flex;
+		align-items: center;
+		padding: 0.2rem 0.65rem;
+		font-size: 0.68rem;
+		letter-spacing: 0.12em;
+		color: var(--color-primary);
+		background: rgba(241, 221, 225, 0.35);
+		border: 0.5px solid rgba(183, 110, 121, 0.25);
+		border-radius: 999px;
+	}
+
+	.project-section-description {
+		margin: 0 0 1.25rem;
+		max-width: 40rem;
+		font-size: 1rem;
+		line-height: 1.85;
+		color: var(--color-text);
+	}
+
+	.project-links-label {
+		margin: 0 0 0.5rem;
+		font-size: 0.72rem;
+		letter-spacing: 0.14em;
+		text-transform: uppercase;
+		color: var(--color-text-muted);
+	}
+
+	.project-links ul {
+		margin: 0;
+		padding: 0;
+		list-style: none;
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.65rem 1.25rem;
+	}
+
+	.project-links a {
+		font-size: 0.9rem;
+		color: var(--color-text);
+		text-decoration: underline;
+		text-decoration-color: rgba(183, 110, 121, 0.35);
+		text-underline-offset: 3px;
+		transition: color 0.2s ease;
+	}
+
+	.project-links a:hover {
+		color: var(--color-primary);
+	}
+
+	@media (max-width: 760px) {
+		.page-hero {
+			margin-bottom: 2rem;
+			padding-bottom: 1.5rem;
+		}
+
+		.page-title {
+			font-size: clamp(1.65rem, 6vw, 2.25rem);
+		}
+
+		.project-section {
+			padding: 1.75rem 0;
+		}
+	}
+</style>

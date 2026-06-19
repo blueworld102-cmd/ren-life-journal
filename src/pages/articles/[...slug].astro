@@ -7,6 +7,7 @@ import ArticleTopNav from '@/components/ArticleTopNav.astro';
 import ArticleBreadcrumb from '@/components/ArticleBreadcrumb.astro';
 import ArticleReturnNav from '@/components/ArticleReturnNav.astro';
 import ArticleDevEdit from '@/components/ArticleDevEdit.astro';
+import ArticleCommentsIntro from '@/components/ArticleCommentsIntro.astro';
 import GiscusComments from '@/components/GiscusComments.astro';
 import { SITE_TITLE } from '@/consts';
 import {
@@ -135,6 +136,7 @@ const moodLine = mood ? `心情：${mood}` : '';
 
 		<ArticleReturnNav />
 		<ArticlePostNav prev={prev} next={next} />
+		<ArticleCommentsIntro />
 		<GiscusComments pathname={`/articles/${post.id}/`} />
 		<ArticleRelated articles={related} />
 		<ArticleDevEdit slug={post.id} />

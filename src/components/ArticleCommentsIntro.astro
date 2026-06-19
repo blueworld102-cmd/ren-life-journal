@@ -1,0 +1,57 @@
+---
+import { getActiveExternalLinks } from '@/utils/externalLinks';
+
+const activeLinks = getActiveExternalLinks();
+const hasSocialLinks = activeLinks.length > 0;
+---
+
+<aside class="comments-intro" aria-label="留言說明">
+	<p class="comments-intro-text">
+		如果你想直接聊天，也可以透過下方留言
+		{
+			hasSocialLinks ? (
+				<>
+					，或到
+					{activeLinks.map((link, index) => (
+						<>
+							{index > 0 && '、'}
+							<a href={link.href} rel="noopener noreferrer" target="_blank">
+								{link.label}
+							</a>
+						</>
+					))}
+					找我。
+				</>
+			) : (
+				<>，或之後到我的社群／方格子找我。</>
+			)
+		}
+	</p>
+</aside>
+
+<style>
+	.comments-intro {
+		margin-top: 2.5rem;
+		margin-bottom: -0.5rem;
+	}
+
+	.comments-intro-text {
+		margin: 0;
+		max-width: 36rem;
+		font-size: 0.92rem;
+		line-height: 1.8;
+		color: var(--color-text-muted);
+		letter-spacing: 0.02em;
+	}
+
+	.comments-intro-text a {
+		color: var(--color-text);
+		text-decoration: underline;
+		text-decoration-color: rgba(183, 110, 121, 0.35);
+		text-underline-offset: 3px;
+	}
+
+	.comments-intro-text a:hover {
+		color: var(--color-primary);
+	}
+</style>

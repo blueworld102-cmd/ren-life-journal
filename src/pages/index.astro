@@ -6,6 +6,7 @@ import FeaturedCategories from '@/components/FeaturedCategories.astro';
 import StartHere from '@/components/StartHere.astro';
 import SectionHeader from '@/components/SectionHeader.astro';
 import ArticleCard from '@/components/ArticleCard.astro';
+import ProjectsPreview from '@/components/ProjectsPreview.astro';
 import PhotoWallPreview from '@/components/PhotoWallPreview.astro';
 import AboutPreview from '@/components/AboutPreview.astro';
 import { getCollection } from 'astro:content';
@@ -53,6 +54,8 @@ const homeTitle = `${SITE_TITLE}｜${SITE_SUBTITLE}`;
 			}
 		</div>
 	</section>
+
+	<ProjectsPreview />
 
 	<PhotoWallPreview />
 
