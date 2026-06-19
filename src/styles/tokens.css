@@ -69,6 +69,12 @@ body {
 	line-height: 1.7;
 	-webkit-font-smoothing: antialiased;
 	overflow-x: hidden;
+	position: relative;
+}
+
+.site-header {
+	position: relative;
+	z-index: 2;
 }
 
 main.page-main {

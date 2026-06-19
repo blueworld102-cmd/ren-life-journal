@@ -1,35 +1,37 @@
 ---
 /**
  * Effects.astro — 全站背景花瓣：緩慢漂浮、低調淡粉
- * 自訂游標見 SiteCursor.astro
+ * 掛載於 BaseLayout.astro；自訂游標見 SiteCursor.astro
  */
 
-const PETAL_COUNT = 18;
+/** 桌機 14 片、手機 6 片 */
+const PETAL_COUNT = 14;
 
 const driftNames = ['petal-float-a', 'petal-float-b', 'petal-float-c'] as const;
 const shapeNames = ['is-teardrop', 'is-ellipse', 'is-sakura'] as const;
 
 const petals = Array.from({ length: PETAL_COUNT }, (_, i) => ({
-	left: `${((i * 41 + 7) % 90) + 5}%`,
-	top: `${((i * 29 + 11) % 82) + 8}%`,
-	delay: `${-((i * 2.3) % 22)}s`,
+	left: `${((i * 37 + 9) % 90) + 5}%`,
+	top: `${((i * 31 + 13) % 78) + 11}%`,
+	delay: `${-((i * 2.7) % 24)}s`,
 	duration: `${18 + (i % 9) * 2}s`,
-	width: `${6 + (i % 4) * 2.5}px`,
-	height: `${10 + (i % 5) * 1.8}px`,
-	opacity: 0.18 + (i % 5) * 0.045,
-	mobileOpacity: 0.12 + (i % 4) * 0.03,
+	width: `${9 + (i % 5) * 1.8}px`,
+	height: `${12 + (i % 4) * 2}px`,
+	opacity: 0.22 + (i % 5) * 0.035,
+	mobileOpacity: 0.16 + (i % 4) * 0.027,
 	drift: driftNames[i % driftNames.length],
 	shape: shapeNames[i % shapeNames.length],
-	rotate: `${18 + (i % 7) * 8}deg`,
-	mobileHidden: i >= 8,
+	rotate: `${16 + (i % 8) * 7}deg`,
+	mobileHidden: i >= 6,
 }));
 ---
 
 <div class="effects-layer sakura-layer" aria-hidden="true">
 	{
-		petals.map((petal) => (
+		petals.map((petal, index) => (
 			<span
 				class:list={['sakura-petal', petal.shape, { 'is-mobile-hidden': petal.mobileHidden }]}
+				data-petal={index + 1}
 				style={{
 					left: petal.left,
 					top: petal.top,
@@ -47,7 +49,7 @@ const petals = Array.from({ length: PETAL_COUNT }, (_, i) => ({
 	}
 </div>
 
-<style>
+<style is:global>
 	.effects-layer,
 	.sakura-layer {
 		position: fixed;
@@ -61,13 +63,13 @@ const petals = Array.from({ length: PETAL_COUNT }, (_, i) => ({
 		position: absolute;
 		display: block;
 		box-sizing: border-box;
-		opacity: var(--petal-opacity, 0.24);
+		opacity: var(--petal-opacity, 0.28);
 		background: linear-gradient(
-			145deg,
-			rgba(241, 221, 225, 0.55) 0%,
-			rgba(183, 110, 121, 0.2) 100%
+			160deg,
+			rgba(252, 242, 244, 0.92) 0%,
+			rgba(241, 221, 225, 0.68) 42%,
+			rgba(220, 180, 188, 0.38) 100%
 		);
-		box-shadow: 0 0 1px rgba(216, 195, 165, 0.18);
 		transform: rotate(var(--petal-rotate, 32deg));
 		animation-timing-function: ease-in-out;
 		animation-iteration-count: infinite;
@@ -79,11 +81,11 @@ const petals = Array.from({ length: PETAL_COUNT }, (_, i) => ({
 	}
 
 	.sakura-petal.is-teardrop {
-		border-radius: 60% 40% 65% 35%;
+		border-radius: 62% 38% 68% 32%;
 	}
 
 	.sakura-petal.is-ellipse {
-		border-radius: 50% 50% 45% 55%;
+		border-radius: 52% 48% 46% 54%;
 	}
 
 	@media (max-width: 768px) {
@@ -97,9 +99,8 @@ const petals = Array.from({ length: PETAL_COUNT }, (_, i) => ({
 	}
 
 	@media (prefers-reduced-motion: reduce) {
-		.sakura-petal {
-			animation: none;
-			opacity: 0.22 !important;
+		.effects-layer {
+			display: none;
 		}
 	}
 
@@ -109,7 +110,7 @@ const petals = Array.from({ length: PETAL_COUNT }, (_, i) => ({
 			transform: translate3d(0, 0, 0) rotate(var(--petal-rotate, 28deg));
 		}
 		50% {
-			transform: translate3d(16px, -20px, 0) rotate(calc(var(--petal-rotate, 28deg) + 14deg));
+			transform: translate3d(12px, -16px, 0) rotate(calc(var(--petal-rotate, 28deg) + 10deg));
 		}
 	}
 
@@ -119,7 +120,7 @@ const petals = Array.from({ length: PETAL_COUNT }, (_, i) => ({
 			transform: translate3d(0, 0, 0) rotate(var(--petal-rotate, 52deg));
 		}
 		50% {
-			transform: translate3d(-14px, 18px, 0) rotate(calc(var(--petal-rotate, 52deg) - 12deg));
+			transform: translate3d(-10px, 14px, 0) rotate(calc(var(--petal-rotate, 52deg) - 9deg));
 		}
 	}
 
@@ -129,10 +130,10 @@ const petals = Array.from({ length: PETAL_COUNT }, (_, i) => ({
 			transform: translate3d(0, 0, 0) rotate(var(--petal-rotate, 18deg));
 		}
 		33% {
-			transform: translate3d(10px, 12px, 0) rotate(calc(var(--petal-rotate, 18deg) + 10deg));
+			transform: translate3d(8px, 10px, 0) rotate(calc(var(--petal-rotate, 18deg) + 7deg));
 		}
 		66% {
-			transform: translate3d(-8px, -14px, 0) rotate(calc(var(--petal-rotate, 18deg) - 8deg));
+			transform: translate3d(-6px, -11px, 0) rotate(calc(var(--petal-rotate, 18deg) - 6deg));
 		}
 	}
 </style>

@@ -1,0 +1,163 @@
+---
+import BaseLayout from '@/components/BaseLayout.astro';
+import Navbar from '@/components/Navbar.astro';
+import SectionHeader from '@/components/SectionHeader.astro';
+import ArticleCard from '@/components/ArticleCard.astro';
+import CategoryIndexRow from '@/components/CategoryIndexRow.astro';
+import { getCollection } from 'astro:content';
+import { FEATURED_CATEGORIES, JAPAN_TOPIC_LABEL, SITE_TITLE } from '@/consts';
+import { getJapanArticles, toArticleCardProps } from '@/utils/articles';
+
+const allArticles = await getCollection('articles');
+const japanArticles = getJapanArticles(allArticles);
+const articleCards = japanArticles.map(toArticleCardProps);
+
+const pageTitle = `Japan Life Journal｜${SITE_TITLE}`;
+const pageDescription =
+	'目前在日本打工度假期間的生活、手續、工作、散步與心情記錄。';
+---
+
+<BaseLayout title={pageTitle} description={pageDescription} noindex>
+	<Navbar slot="navbar" currentPath={Astro.url.pathname} />
+
+	<SectionHeader
+		eyebrow="Japan"
+		title="Japan Life Journal"
+		lead={pageDescription}
+	/>
+
+	<p class="chapter-note">
+		這是 <strong>{SITE_TITLE}</strong> 的 Japan 篇章。全部文章仍可在
+		<a href="/articles">Journal</a> 瀏覽與搜尋。
+	</p>
+
+	<section class="japan-categories" aria-label="Japan 分類入口">
+		<header class="block-header">
+			<p class="block-eyebrow">Categories</p>
+			<h2 class="block-title">從這裡開始讀</h2>
+		</header>
+		<nav class="category-index">
+			{FEATURED_CATEGORIES.map((category) => <CategoryIndexRow {...category} />)}
+		</nav>
+	</section>
+
+	<section class="japan-latest" aria-label="Japan 最新文章">
+		<header class="block-header">
+			<p class="block-eyebrow">Latest in Japan</p>
+			<h2 class="block-title">最新文章</h2>
+			<p class="block-lead">共 {articleCards.length} 篇與日本生活相關的記錄。</p>
+		</header>
+
+		<div class="article-list">
+			{articleCards.map((article) => <ArticleCard {...article} />)}
+		</div>
+
+		<p class="journal-link">
+			<a href="/articles" class="btn btn-text" data-cursor-hover>查看全部 Journal 文章 →</a>
+		</p>
+	</section>
+
+	<section class="future-chapter" aria-label="未來篇章">
+		<p class="future-eyebrow">Coming later</p>
+		<h2 class="future-title">Australia 篇章</h2>
+		<p class="future-copy">
+			未來會在這裡加入澳洲打工度假、海邊早晨與新城市的章節。目前先專注記錄在東京的這段日子。
+		</p>
+	</section>
+</BaseLayout>
+
+<style>
+	.chapter-note {
+		margin: -0.5rem 0 2rem;
+		font-size: 0.86rem;
+		line-height: 1.75;
+		color: var(--color-muted);
+	}
+
+	.chapter-note strong {
+		color: var(--color-text);
+		font-weight: 500;
+	}
+
+	.chapter-note a {
+		color: var(--color-accent);
+		text-decoration: none;
+	}
+
+	.chapter-note a:hover {
+		text-decoration: underline;
+	}
+
+	.japan-categories,
+	.japan-latest {
+		margin-bottom: 2.75rem;
+	}
+
+	.block-header {
+		margin-bottom: 1rem;
+	}
+
+	.block-eyebrow {
+		margin: 0 0 0.35rem;
+		font-size: 0.72rem;
+		letter-spacing: 0.24em;
+		text-transform: uppercase;
+		color: var(--color-muted);
+	}
+
+	.block-title {
+		margin: 0 0 0.35rem;
+		font-family: var(--font-title);
+		font-size: clamp(1.25rem, 2.5vw, 1.6rem);
+		font-weight: 600;
+	}
+
+	.block-lead {
+		margin: 0;
+		font-size: 0.88rem;
+		color: var(--color-muted);
+	}
+
+	.category-index {
+		display: flex;
+		flex-direction: column;
+	}
+
+	.article-list {
+		display: grid;
+		gap: 1.25rem;
+	}
+
+	.journal-link {
+		margin: 1.5rem 0 0;
+	}
+
+	.future-chapter {
+		padding: 1.5rem;
+		background: var(--color-surface);
+		border: 0.5px dashed var(--color-border);
+		border-radius: var(--radius-md);
+	}
+
+	.future-eyebrow {
+		margin: 0 0 0.35rem;
+		font-size: 0.72rem;
+		letter-spacing: 0.2em;
+		text-transform: uppercase;
+		color: var(--color-muted);
+	}
+
+	.future-title {
+		margin: 0 0 0.5rem;
+		font-family: var(--font-title);
+		font-size: 1.15rem;
+		font-weight: 600;
+	}
+
+	.future-copy {
+		margin: 0;
+		font-size: 0.9rem;
+		line-height: 1.75;
+		color: var(--color-muted);
+	}
+</style>

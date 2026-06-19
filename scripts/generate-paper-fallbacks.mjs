@@ -3,7 +3,7 @@
  * 僅使用柔和漸層 + 細緻顆粒，不含幾何色塊。
  * 正式插畫就緒後，直接覆蓋 public/images/site/backgrounds/ 同名檔案即可。
  */
-import { copyFile, mkdir } from 'node:fs/promises';
+import { mkdir, stat } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import sharp from 'sharp';
@@ -14,6 +14,60 @@ const publicDir = path.join(root, 'public');
 
 const W = 1600;
 const H = 1200;
+/** 視為正式圖的最小檔案大小（bytes） */
+const PROTECT_MIN_BYTES = 120 * 1024;
+
+async function resolveAssetAction(relativePath) {
+	const out = path.join(publicDir, relativePath);
+	try {
+		const info = await stat(out);
+		if (!info.isFile()) return 'create';
+		if (info.size >= PROTECT_MIN_BYTES) return 'protect';
+		return 'skip';
+	} catch {
+		return 'create';
+	}
+}
+
+async function writePng(relativePath, svg) {
+	const action = await resolveAssetAction(relativePath);
+	if (action === 'protect') {
+		const out = path.join(publicDir, relativePath);
+		const info = await stat(out);
+		console.log(`  [protect] ${relativePath} — 正式圖 (${info.size} bytes)，不覆蓋`);
+		return;
+	}
+	if (action === 'skip') {
+		const out = path.join(publicDir, relativePath);
+		const info = await stat(out);
+		console.log(`  [skip] ${relativePath} — 檔案已存在 (${info.size} bytes)，不覆蓋`);
+		return;
+	}
+	const out = path.join(publicDir, relativePath);
+	await mkdir(path.dirname(out), { recursive: true });
+	await sharp(Buffer.from(svg)).png({ compressionLevel: 9 }).toFile(out);
+	console.log(`  [create] ${relativePath} — paper fallback`);
+}
+
+async function writeArticleCover() {
+	const rel = 'images/posts/shibuya-ward-office-rainy-day/cover.png';
+	const action = await resolveAssetAction(rel);
+	if (action === 'protect') {
+		const info = await stat(path.join(publicDir, rel));
+		console.log(`  [protect] ${rel} — 正式圖 (${info.size} bytes)，不覆蓋`);
+		return;
+	}
+	if (action === 'skip') {
+		const info = await stat(path.join(publicDir, rel));
+		console.log(`  [skip] ${rel} — 檔案已存在 (${info.size} bytes)，不覆蓋`);
+		return;
+	}
+	const svgPath = path.join(publicDir, 'images/covers/shibuya-rain.svg');
+	const outPath = path.join(publicDir, rel);
+	await mkdir(path.dirname(outPath), { recursive: true });
+	await sharp(svgPath).resize(1200, 800, { fit: 'cover' }).png({ compressionLevel: 9 }).toFile(outPath);
+	console.log(`  [create] ${rel} — from shibuya-rain.svg`);
+}
 
 function paperSvg(stops, seed = 3) {
 	const gradientStops = stops
@@ -130,22 +184,6 @@ const backgrounds = [
 		),
 	},
 ];
-
-async function writePng(relativePath, svg) {
-	const out = path.join(publicDir, relativePath);
-	await mkdir(path.dirname(out), { recursive: true });
-	await sharp(Buffer.from(svg)).png({ compressionLevel: 9 }).toFile(out);
-	console.log(`  ✓ ${relativePath}`);
-}
-
-async function writeArticleCover() {
-	const svgPath = path.join(publicDir, 'images/covers/shibuya-rain.svg');
-	const outDir = path.join(publicDir, 'images/posts/shibuya-ward-office-rainy-day');
-	const outPath = path.join(outDir, 'cover.png');
-	await mkdir(outDir, { recursive: true });
-	await sharp(svgPath).resize(1200, 800, { fit: 'cover' }).png({ compressionLevel: 9 }).toFile(outPath);
-	console.log('  ✓ images/posts/shibuya-ward-office-rainy-day/cover.png (from shibuya-rain.svg)');
-}
 
 async function main() {
 	console.log('產生紙張紋理 fallback PNG…');

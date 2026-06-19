@@ -8,25 +8,19 @@ interface Props {
 
 const { currentPath } = Astro.props;
 
-const isJapanTopic = Astro.url.search.includes('topic=japan');
-
 const navItems = [
 	{ href: '/', label: 'Home', labelZh: '首頁' },
 	{ href: '/articles', label: 'Journal', labelZh: '文章' },
-	{ href: '/articles?topic=japan', label: 'Japan', labelZh: '日本' },
 	{ href: '/photos', label: 'Photos', labelZh: '照片' },
 	{ href: '/about', label: 'About', labelZh: '關於' },
 ];
 
 const isActive = (href: string) => {
 	if (href === '/') return currentPath === '/';
-	if (href.includes('topic=japan')) {
-		return currentPath.startsWith('/articles') && isJapanTopic;
-	}
 	if (href === '/articles') {
-		return currentPath.startsWith('/articles') && !isJapanTopic;
+		return currentPath.startsWith('/articles');
 	}
-	return currentPath.startsWith(href);
+	return currentPath === href || currentPath.startsWith(`${href}/`);
 };
 
 const isJournalPage = currentPath.startsWith('/articles');
@@ -85,7 +79,7 @@ const isJournalPage = currentPath.startsWith('/articles');
 	.navbar {
 		position: sticky;
 		top: 0;
-		z-index: 100;
+		z-index: 3;
 		background: rgba(250, 247, 242, 0.92);
 		backdrop-filter: blur(10px);
 		border-bottom: 0.5px solid var(--color-border);

@@ -1,0 +1,58 @@
+# Decap CMS — Ren's Life Journal
+# 文件：https://decapcms.org/docs/configuration-options/
+
+backend:
+  name: github
+  repo: blueworld102-cmd/ren-life-journal
+  branch: main
+  # OAuth backend — 完成設定後取消註解（見 docs/cms-setup-guide.md）
+  # base_url: https://YOUR_OAUTH_HOST
+  # auth_endpoint: auth
+
+# 本地開發可用：npx decap-server（僅本機，不影響 production）
+# local_backend: true
+
+media_folder: public/images/uploads
+public_folder: /images/uploads
+
+slug:
+  encoding: unicode
+  clean_accents: true
+
+publish_mode: simple
+
+collections:
+  - name: articles
+    label: 文章
+    label_singular: 文章
+    folder: src/content/articles
+    create: true
+    slug: '{{slug}}'
+    extension: md
+    format: frontmatter
+    fields:
+      - { label: 標題, name: title, widget: string }
+      - { label: 摘要, name: description, widget: text }
+      - { label: 發布日期, name: pubDate, widget: datetime, date_format: 'YYYY-MM-DDTHH:mm:ss.SSSZ', time_format: false }
+      - { label: 更新日期, name: updatedDate, widget: datetime, required: false, date_format: 'YYYY-MM-DDTHH:mm:ss.SSSZ', time_format: false }
+      - { label: 草稿, name: draft, widget: boolean, default: true }
+      - label: 分類
+        name: category
+        widget: select
+        options:
+          - 日本生活
+          - 日本生活手續
+          - 打工度假
+          - 東京散步
+          - 旅遊紀錄
+          - 省錢生活
+          - 工作與職涯
+          - 心情筆記
+      - { label: 標籤, name: tags, widget: list, default: [] }
+      - { label: 地點, name: location, widget: string, required: false }
+      - { label: 天氣, name: weather, widget: string, required: false }
+      - { label: 心情, name: mood, widget: string, required: false }
+      - { label: 閱讀時間, name: readingTime, widget: string, required: false, hint: '例：6 分鐘' }
+      - { label: 封面, name: cover, widget: image, required: false, hint: '上傳後路徑如 /images/uploads/xxx.png，可改為 /images/posts/{slug}/cover.png' }
+      - { label: 封面位置, name: coverPosition, widget: string, default: center, required: false }
+      - { label: 正文, name: body, widget: markdown }

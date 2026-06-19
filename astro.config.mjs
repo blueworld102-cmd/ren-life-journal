@@ -34,7 +34,10 @@ export default defineConfig({
 	integrations: [
 		mdx(),
 		sitemap({
-			filter: (page) => !page.includes('/admin-help'),
+			filter: (page) =>
+				!page.includes('/admin-help') &&
+				!page.includes('/admin') &&
+				!page.includes('/japan'),
 		}),
 	],
 	redirects: {
