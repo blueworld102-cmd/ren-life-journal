@@ -41,36 +41,103 @@ publish_mode: simple
 
 collections:
   - name: articles
-    label: 文章
-    label_singular: 文章
+    label: 生活文章
+    label_singular: 生活文章
     folder: src/content/articles
     create: true
     slug: '{{slug}}'
     extension: md
     format: frontmatter
+    summary: '{{title}}'
+    editor:
+      preview: false
     fields:
-      - { label: 標題, name: title, widget: string }
-      - { label: 摘要, name: description, widget: text }
-      - { label: 發布日期, name: pubDate, widget: datetime, date_format: 'YYYY-MM-DDTHH:mm:ss.SSSZ', time_format: false }
-      - { label: 更新日期, name: updatedDate, widget: datetime, required: false, date_format: 'YYYY-MM-DDTHH:mm:ss.SSSZ', time_format: false }
-      - { label: 草稿, name: draft, widget: boolean, default: true }
+      - label: 標題
+        name: title
+        widget: string
+        hint: '文章主標題，會顯示在列表與文章頁最上方'
+
+      - label: 草稿
+        name: draft
+        widget: boolean
+        default: true
+        hint: '勾選＝草稿（網站不顯示）；取消勾選＝正式發布'
+
+      - label: 發布日期
+        name: pubDate
+        widget: datetime
+        date_format: YYYY-MM-DD
+        format: YYYY-MM-DD
+        time_format: false
+        hint: '選擇文章發布日期即可，不需填時間'
+
+      - label: 摘要
+        name: description
+        widget: text
+        hint: '一兩句話介紹這篇文章，會出現在文章卡片與搜尋結果'
+
       - label: 分類
         name: category
         widget: select
         options:
-          - 日本生活
           - 日本生活手續
           - 打工度假
           - 東京散步
-          - 旅遊紀錄
           - 省錢生活
-          - 工作與職涯
           - 心情筆記
-      - { label: 標籤, name: tags, widget: list, default: [] }
-      - { label: 地點, name: location, widget: string, required: false }
-      - { label: 天氣, name: weather, widget: string, required: false }
-      - { label: 心情, name: mood, widget: string, required: false }
-      - { label: 閱讀時間, name: readingTime, widget: string, required: false, hint: '例：6 分鐘' }
-      - { label: 封面, name: cover, widget: image, required: false, hint: '上傳後路徑如 /images/uploads/xxx.png；封面說明請寫在文章 description 或正文圖片 alt' }
-      - { label: 封面位置, name: coverPosition, widget: string, default: center, required: false }
-      - { label: 正文, name: body, widget: markdown, hint: '內文圖片可用 Markdown 插入，或先上傳到媒體庫再引用' }
+
+      - label: 標籤
+        name: tags
+        widget: list
+        default: []
+        hint: '按「Add 標籤」可新增多個，例如：原宿、雨天、咖啡廳'
+
+      - label: 地點
+        name: location
+        widget: string
+        required: false
+        hint: '例：東京・原宿'
+
+      - label: 天氣
+        name: weather
+        widget: select
+        required: false
+        options:
+          - 晴
+          - 雨
+          - 陰
+          - 雲
+          - 雪
+
+      - label: 心情
+        name: mood
+        widget: string
+        required: false
+        hint: '自由填寫，例：有點孤單，但街道很漂亮'
+
+      - label: 閱讀時間
+        name: readingTime
+        widget: string
+        required: false
+        hint: '例：6 分鐘'
+
+      - label: 封面圖片
+        name: cover
+        widget: image
+        required: false
+        hint: '點選上傳照片，會自動存到媒體庫並設為文章封面'
+
+      - label: 封面位置
+        name: coverPosition
+        widget: select
+        default: center
+        required: false
+        options:
+          - { label: 置中, value: center }
+          - { label: 偏上, value: top }
+          - { label: 偏下, value: bottom }
+
+      - label: 正文
+        name: body
+        widget: markdown
+        hint: '用 Markdown 寫正文。段落之間空一行即可；內文插圖可用編輯器工具列上傳'
