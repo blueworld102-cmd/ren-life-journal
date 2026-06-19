@@ -1,57 +1,42 @@
 ---
 /**
- * Giscus 留言區 — 需設定環境變數後才顯示。
- * 設定步驟見 docs/comments-setup-guide.md
+ * Giscus 留言區 — 文章頁底部。
+ * 環境變數可覆寫預設值；見 docs/comments-setup-guide.md
  */
 interface Props {
-	/** 預設使用目前頁面 pathname */
 	pathname?: string;
 }
 
 const { pathname = Astro.url.pathname } = Astro.props;
 
-const repo = import.meta.env.PUBLIC_GISCUS_REPO;
-const repoId = import.meta.env.PUBLIC_GISCUS_REPO_ID;
-const category = import.meta.env.PUBLIC_GISCUS_CATEGORY ?? 'Article Comments';
-const categoryId = import.meta.env.PUBLIC_GISCUS_CATEGORY_ID;
-
-const isConfigured = Boolean(repo && repoId && categoryId);
+const repo = import.meta.env.PUBLIC_GISCUS_REPO ?? 'blueworld102-cmd/ren-life-journal';
+const repoId = import.meta.env.PUBLIC_GISCUS_REPO_ID ?? 'R_kgDOS_FvLg';
+const category = import.meta.env.PUBLIC_GISCUS_CATEGORY ?? 'Announcements';
+const categoryId = import.meta.env.PUBLIC_GISCUS_CATEGORY_ID ?? 'DIC_kwDOS_FvLs4C_d4y';
 ---
 
-{
-	isConfigured ? (
-		<section class="giscus-comments" aria-label="留言區">
-			<h2 class="giscus-title">留言與回應</h2>
-			<div class="giscus-mount" id="giscus-mount" />
-			<script
-				is:inline
-				define:vars={{ repo, repoId, category, categoryId, pathname }}
-			>
-				(function () {
-					const mount = document.getElementById('giscus-mount');
-					if (!mount) return;
-
-					const script = document.createElement('script');
-					script.src = 'https://giscus.app/client.js';
-					script.setAttribute('data-repo', repo);
-					script.setAttribute('data-repo-id', repoId);
-					script.setAttribute('data-category', category);
-					script.setAttribute('data-category-id', categoryId);
-					script.setAttribute('data-mapping', 'pathname');
-					script.setAttribute('data-strict', '0');
-					script.setAttribute('data-reactions-enabled', '1');
-					script.setAttribute('data-emit-metadata', '0');
-					script.setAttribute('data-input-position', 'bottom');
-					script.setAttribute('data-theme', 'noborder_light');
-					script.setAttribute('data-lang', 'zh-TW');
-					script.setAttribute('crossorigin', 'anonymous');
-					script.async = true;
-					mount.appendChild(script);
-				})();
-			</script>
-		</section>
-	) : null
-}
+<section class="giscus-comments" aria-label="留言區">
+	<h2 class="giscus-title">留言與回應</h2>
+	<div class="giscus-mount giscus" data-pathname={pathname} />
+	<script
+		is:inline
+		src="https://giscus.app/client.js"
+		data-repo={repo}
+		data-repo-id={repoId}
+		data-category={category}
+		data-category-id={categoryId}
+		data-mapping="pathname"
+		data-strict="0"
+		data-reactions-enabled="1"
+		data-emit-metadata="0"
+		data-input-position="bottom"
+		data-theme="preferred_color_scheme"
+		data-lang="zh-TW"
+		data-loading="lazy"
+		crossorigin="anonymous"
+		async
+	/>
+</section>
 
 <style>
 	.giscus-comments {
