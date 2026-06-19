@@ -17,8 +17,8 @@ const petals = Array.from({ length: PETAL_COUNT }, (_, i) => ({
 	duration: `${18 + (i % 9) * 2}s`,
 	width: `${9 + (i % 5) * 1.8}px`,
 	height: `${12 + (i % 4) * 2}px`,
-	opacity: 0.22 + (i % 5) * 0.035,
-	mobileOpacity: 0.16 + (i % 4) * 0.027,
+	opacity: 0.24 + (i % 5) * 0.035,
+	mobileOpacity: 0.18 + (i % 4) * 0.02,
 	drift: driftNames[i % driftNames.length],
 	shape: shapeNames[i % shapeNames.length],
 	rotate: `${16 + (i % 8) * 7}deg`,
@@ -40,9 +40,7 @@ const petals = Array.from({ length: PETAL_COUNT }, (_, i) => ({
 					'--petal-opacity': petal.opacity,
 					'--petal-opacity-mobile': petal.mobileOpacity,
 					'--petal-rotate': petal.rotate,
-					animationDuration: petal.duration,
-					animationDelay: petal.delay,
-					animationName: petal.drift,
+					animation: `${petal.drift} ${petal.duration} ease-in-out ${petal.delay} infinite`,
 				}}
 			/>
 		))
@@ -54,6 +52,8 @@ const petals = Array.from({ length: PETAL_COUNT }, (_, i) => ({
 	.sakura-layer {
 		position: fixed;
 		inset: 0;
+		width: 100%;
+		height: 100%;
 		overflow: hidden;
 		pointer-events: none;
 		z-index: 1;
@@ -63,16 +63,15 @@ const petals = Array.from({ length: PETAL_COUNT }, (_, i) => ({
 		position: absolute;
 		display: block;
 		box-sizing: border-box;
-		opacity: var(--petal-opacity, 0.28);
+		opacity: var(--petal-opacity, 0.3);
 		background: linear-gradient(
 			160deg,
-			rgba(252, 242, 244, 0.92) 0%,
-			rgba(241, 221, 225, 0.68) 42%,
-			rgba(220, 180, 188, 0.38) 100%
+			rgba(252, 238, 242, 0.95) 0%,
+			rgba(241, 221, 225, 0.75) 40%,
+			rgba(210, 165, 175, 0.45) 100%
 		);
+		box-shadow: 0 0 6px rgba(241, 221, 225, 0.35);
 		transform: rotate(var(--petal-rotate, 32deg));
-		animation-timing-function: ease-in-out;
-		animation-iteration-count: infinite;
 		will-change: transform;
 	}
 
@@ -94,13 +93,14 @@ const petals = Array.from({ length: PETAL_COUNT }, (_, i) => ({
 		}
 
 		.sakura-petal {
-			opacity: var(--petal-opacity-mobile, 0.18);
+			opacity: var(--petal-opacity-mobile, 0.2);
+			box-shadow: 0 0 4px rgba(241, 221, 225, 0.28);
 		}
 	}
 
 	@media (prefers-reduced-motion: reduce) {
 		.effects-layer {
-			display: none;
+			display: none !important;
 		}
 	}
 

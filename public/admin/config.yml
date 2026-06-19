@@ -53,6 +53,6 @@ collections:
       - { label: 天氣, name: weather, widget: string, required: false }
       - { label: 心情, name: mood, widget: string, required: false }
       - { label: 閱讀時間, name: readingTime, widget: string, required: false, hint: '例：6 分鐘' }
-      - { label: 封面, name: cover, widget: image, required: false, hint: '上傳後路徑如 /images/uploads/xxx.png，可改為 /images/posts/{slug}/cover.png' }
+      - { label: 封面, name: cover, widget: image, required: false, hint: '上傳後路徑如 /images/uploads/xxx.png；封面說明請寫在文章 description 或正文圖片 alt' }
       - { label: 封面位置, name: coverPosition, widget: string, default: center, required: false }
-      - { label: 正文, name: body, widget: markdown }
+      - { label: 正文, name: body, widget: markdown, hint: '內文圖片可用 Markdown 插入，或先上傳到媒體庫再引用' }

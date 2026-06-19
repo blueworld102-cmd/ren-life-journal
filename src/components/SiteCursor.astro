@@ -5,7 +5,7 @@
 <div id="cursor-dot" class="site-cursor-dot" aria-hidden="true"></div>
 <div id="cursor-ring" class="site-cursor-ring" aria-hidden="true"></div>
 
-<style>
+<style is:global>
 	.site-cursor-dot,
 	.site-cursor-ring {
 		position: fixed;
@@ -17,17 +17,18 @@
 	}
 
 	.site-cursor-dot {
-		width: 6px;
-		height: 6px;
+		width: 5px;
+		height: 5px;
 		border-radius: 50%;
-		background: rgba(183, 110, 121, 0.65);
+		background: rgba(183, 110, 121, 0.72);
+		box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.35);
 		transform: translate3d(-100px, -100px, 0) translate(-50%, -50%);
 		opacity: 0;
 		transition:
-			width 0.2s ease,
-			height 0.2s ease,
-			background 0.2s ease,
-			opacity 0.2s ease;
+			width 0.18s ease,
+			height 0.18s ease,
+			background 0.18s ease,
+			opacity 0.18s ease;
 	}
 
 	.site-cursor-dot.is-visible {
@@ -35,29 +36,30 @@
 	}
 
 	.site-cursor-dot.is-hover {
-		width: 5px;
-		height: 5px;
-		background: rgba(183, 110, 121, 0.5);
+		width: 4px;
+		height: 4px;
+		background: rgba(183, 110, 121, 0.58);
 	}
 
 	.site-cursor-dot.is-click {
-		width: 4px;
-		height: 4px;
-		background: rgba(183, 110, 121, 0.75);
+		width: 3px;
+		height: 3px;
+		background: rgba(183, 110, 121, 0.85);
 	}
 
 	.site-cursor-ring {
-		width: 28px;
-		height: 28px;
-		border: 1px solid rgba(183, 110, 121, 0.45);
-		border-radius: 3px;
-		background: rgba(183, 110, 121, 0.03);
+		width: 30px;
+		height: 30px;
+		border: 1px solid rgba(183, 110, 121, 0.42);
+		border-radius: 4px;
+		background: rgba(241, 221, 225, 0.06);
+		box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.25);
 		transform: translate3d(-100px, -100px, 0) translate(-50%, -50%) scale(1);
 		opacity: 0;
 		transition:
-			opacity 0.25s ease,
-			transform 0.25s ease,
-			border-color 0.25s ease;
+			opacity 0.2s ease,
+			transform 0.2s ease,
+			border-color 0.2s ease;
 	}
 
 	.site-cursor-ring.is-visible {
@@ -66,61 +68,62 @@
 
 	.site-cursor-ring.is-click {
 		transform: translate3d(var(--ring-x, -100px), var(--ring-y, -100px), 0)
-			translate(-50%, -50%) scale(0.9);
+			translate(-50%, -50%) scale(0.88);
 		border-color: rgba(183, 110, 121, 0.55);
 	}
 
-	:global(.rose-bloom) {
+	.rose-bloom {
 		position: fixed;
-		width: 28px;
-		height: 28px;
+		width: 30px;
+		height: 30px;
 		transform: translate(-50%, -50%);
 		pointer-events: none;
-		z-index: 500;
-		animation: rose-svg-bloom 600ms ease-out forwards;
+		z-index: 9998;
+		animation: rose-svg-bloom 580ms ease-out forwards;
 	}
 
-	:global(.rose-bloom svg) {
+	.rose-bloom svg {
 		display: block;
 		width: 100%;
 		height: 100%;
 		overflow: visible;
 	}
 
-	:global(.rose-bloom .rose-svg-petal) {
+	.rose-bloom .rose-svg-petal {
 		transform-origin: 24px 24px;
 		transform-box: fill-box;
 	}
 
 	@keyframes rose-svg-bloom {
 		0% {
-			transform: translate(-50%, -50%) scale(0.25);
+			transform: translate(-50%, -50%) scale(0.2);
 			opacity: 0;
 		}
-		22% {
-			opacity: 0.5;
+		18% {
+			opacity: 0.72;
 		}
-		72% {
+		65% {
 			transform: translate(-50%, -50%) scale(1);
-			opacity: 0.42;
+			opacity: 0.55;
 		}
 		100% {
-			transform: translate(-50%, -50%) scale(1.08);
+			transform: translate(-50%, -50%) scale(1.06);
 			opacity: 0;
 		}
 	}
 
 	@media (pointer: fine) and (prefers-reduced-motion: no-preference) {
-		:global(*),
-		:global(*::before),
-		:global(*::after) {
+		*,
+		*::before,
+		*::after {
 			cursor: none !important;
 		}
 	}
 
 	@media (prefers-reduced-motion: reduce), (pointer: coarse) {
 		.site-cursor-dot,
-		.site-cursor-ring {
+		.site-cursor-ring,
+		.rose-bloom {
 			display: none !important;
 		}
 	}
@@ -129,7 +132,7 @@
 <script>
 	const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
 	const ROSE_PETALS = 8;
-	const ROSE_LIFETIME_MS = 680;
+	const ROSE_LIFETIME_MS = 620;
 	const SVG_NS = 'http://www.w3.org/2000/svg';
 
 	(function initSiteCursor() {
@@ -165,11 +168,11 @@
 				const petal = document.createElementNS(SVG_NS, 'ellipse');
 				petal.setAttribute('cx', '24');
 				petal.setAttribute('cy', '14');
-				petal.setAttribute('rx', '3.8');
-				petal.setAttribute('ry', '6.2');
-				petal.setAttribute('fill', 'rgba(241, 221, 225, 0.5)');
-				petal.setAttribute('stroke', 'rgba(183, 110, 121, 0.2)');
-				petal.setAttribute('stroke-width', '0.45');
+				petal.setAttribute('rx', '4');
+				petal.setAttribute('ry', '6.5');
+				petal.setAttribute('fill', 'rgba(241, 221, 225, 0.72)');
+				petal.setAttribute('stroke', 'rgba(183, 110, 121, 0.35)');
+				petal.setAttribute('stroke-width', '0.5');
 				petal.setAttribute('transform', `rotate(${step * i} 24 24)`);
 				petal.classList.add('rose-svg-petal');
 				group.appendChild(petal);
@@ -178,8 +181,8 @@
 			const center = document.createElementNS(SVG_NS, 'circle');
 			center.setAttribute('cx', '24');
 			center.setAttribute('cy', '24');
-			center.setAttribute('r', '2.2');
-			center.setAttribute('fill', 'rgba(183, 110, 121, 0.4)');
+			center.setAttribute('r', '2.4');
+			center.setAttribute('fill', 'rgba(183, 110, 121, 0.55)');
 			group.appendChild(center);
 
 			svg.appendChild(group);
@@ -212,12 +215,12 @@
 		function tick() {
 			dot.style.transform = `translate3d(${mouseX}px, ${mouseY}px, 0) translate(-50%, -50%)`;
 
-			ringX = lerp(ringX, mouseX, 0.14);
-			ringY = lerp(ringY, mouseY, 0.14);
+			ringX = lerp(ringX, mouseX, 0.16);
+			ringY = lerp(ringY, mouseY, 0.16);
 			ring.style.setProperty('--ring-x', `${ringX}px`);
 			ring.style.setProperty('--ring-y', `${ringY}px`);
 			ring.style.transform = `translate3d(${ringX}px, ${ringY}px, 0) translate(-50%, -50%) scale(${
-				isClick ? 0.9 : 1
+				isClick ? 0.88 : 1
 			})`;
 
 			dot.classList.toggle('is-hover', isHover);
