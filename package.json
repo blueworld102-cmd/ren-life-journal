@@ -13,7 +13,8 @@
     "astro": "astro",
     "new:article": "node scripts/new-article.mjs",
     "check:assets": "node scripts/check-assets.mjs",
-    "seed:images": "node scripts/seed-site-images.mjs"
+    "seed:images": "node scripts/seed-site-images.mjs",
+    "generate:paper-fallbacks": "node scripts/generate-paper-fallbacks.mjs"
   },
   "dependencies": {
     "@astrojs/mdx": "^6.0.3",

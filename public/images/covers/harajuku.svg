@@ -6,5 +6,4 @@
     </linearGradient>
   </defs>
   <rect width="800" height="600" fill="url(#g)"/>
-  <ellipse cx="400" cy="500" rx="280" ry="40" fill="rgba(46,42,39,0.06)"/>
 </svg>

@@ -1,5 +1,3 @@
-import { siteBackgrounds } from './siteBackgrounds';
-
 export type PhotoItem = {
 	title: string;
 	image: string;
@@ -13,17 +11,17 @@ export type PhotoItem = {
 	imagePosition?: string;
 };
 
-/** 照片牆完整清單。首頁預覽取前 6 張。 */
+/** 照片牆完整清單。首頁預覽取 PHOTO_PREVIEW_ITEMS。 */
 export const PHOTOS: PhotoItem[] = [
 	{
 		title: '雨天窗邊的東京鐵塔',
-		image: siteBackgrounds.heroPrimary.src,
+		image: '/images/photos/harajuku-rain.svg',
 		date: '2026-06-19',
 		location: '東京・澀谷',
 		weather: '雨',
 		mood: '緊張但有一點安心',
 		tags: ['雨天', '澀谷', '窗邊'],
-		alt: siteBackgrounds.heroPrimary.alt,
+		alt: '柔和雨天色調，呼應澀谷區役所那天的心情',
 		relatedPost: '/articles/shibuya-ward-office-rainy-day',
 		imagePosition: 'center',
 	},
@@ -112,69 +110,70 @@ export const PHOTOS: PhotoItem[] = [
 	},
 ];
 
-/** 首頁 Photo Wall Preview — 使用 siteBackgrounds 正式素材 */
+/** 首頁 Photo Wall Preview — 使用乾淨 SVG 色調卡（非 seed 占位 PNG） */
 export const PHOTO_PREVIEW_ITEMS: PhotoItem[] = [
 	{
-		title: '雨窗裡的東京',
-		image: siteBackgrounds.heroPrimary.src,
+		title: '雨天窗邊',
+		image: '/images/photos/harajuku-rain.svg',
 		date: '2026-06-19',
-		location: '東京',
+		location: '東京・澀谷',
 		weather: '雨',
 		mood: '安靜地開始',
-		tags: ['東京', '雨天', '視窗'],
-		alt: siteBackgrounds.heroPrimary.alt,
+		tags: ['東京', '雨天'],
+		alt: '柔和雨天色調預覽卡',
 		relatedPost: '/articles/shibuya-ward-office-rainy-day',
 	},
 	{
 		title: '雨中的街道',
-		image: siteBackgrounds.windowStreet.src,
+		image: '/images/photos/umbrella-street.svg',
 		date: '2025-11-08',
 		location: '東京・神樂坂',
 		weather: '雨',
 		mood: '慢慢走',
 		tags: ['散步', '雨天', '街道'],
-		alt: siteBackgrounds.windowStreet.alt,
+		alt: '雨後街道的柔和色調',
 		relatedPost: '/articles/harajuku-rainy-walk',
 	},
 	{
 		title: '咖啡廳的早晨',
-		image: siteBackgrounds.windowCafe.src,
+		image: '/images/photos/cafe-corner.svg',
 		date: '2025-10-12',
 		location: '東京・表參道',
 		weather: '晴',
 		mood: '慢慢來',
 		tags: ['咖啡廳', '早晨', '筆記'],
-		alt: siteBackgrounds.windowCafe.alt,
+		alt: '早晨咖啡廳窗邊的柔和色調',
 	},
 	{
 		title: '超市生活日',
-		image: siteBackgrounds.lifestyleSupermarket.src,
+		image: '/images/photos/supermarket.svg',
 		date: '2025-09-08',
 		location: '東京・中野',
 		weather: '多雲',
 		mood: '生活感',
 		tags: ['超市', '自炊', '省錢'],
-		alt: siteBackgrounds.lifestyleSupermarket.alt,
+		alt: '超市日常補貨的柔和色調',
 		relatedPost: '/articles/tokyo-monthly-expenses',
 	},
 	{
-		title: '旅行筆記桌',
-		image: siteBackgrounds.travelDesk.src,
-		date: '2025-07-22',
-		location: '東京',
+		title: '電車與黃昏',
+		image: '/images/photos/station-evening.svg',
+		date: '2025-10-21',
+		location: '東京・新宿',
 		weather: '晴',
-		mood: '整理思緒',
-		tags: ['筆記', '旅行', '書桌'],
-		alt: siteBackgrounds.travelDesk.alt,
+		mood: '面試前',
+		tags: ['電車', '黃昏', '新宿'],
+		alt: '黃昏電車月台的柔和色調',
+		relatedPost: '/articles/job-interview-practice',
 	},
 	{
-		title: '澳洲海岸的預告',
-		image: siteBackgrounds.australiaCoast.src,
-		date: '2027-01-01',
-		location: '澳洲・黃金海岸',
+		title: '週末早晨',
+		image: '/images/photos/morning-commute.svg',
+		date: '2025-07-22',
+		location: '東京・谷中',
 		weather: '晴',
-		mood: '下一個篇章',
-		tags: ['澳洲', '海岸', '預告'],
-		alt: siteBackgrounds.australiaCoast.alt,
+		mood: '慢慢醒來',
+		tags: ['週末', '早晨', '谷中'],
+		alt: '週末早晨通勤路上的柔和色調',
 	},
 ];
