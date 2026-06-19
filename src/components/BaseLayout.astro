@@ -1,0 +1,61 @@
+---
+import BaseHead from './BaseHead.astro';
+import Effects from '@/components/Effects.astro';
+import SiteCursor from '@/components/SiteCursor.astro';
+import SiteFooter from '@/components/SiteFooter.astro';
+import { SITE_DESCRIPTION } from '../consts';
+import '@/styles/tokens.css';
+
+interface Props {
+	title: string;
+	description?: string;
+	image?: string;
+	ogType?: 'website' | 'article';
+	publishedTime?: string;
+	modifiedTime?: string;
+	tags?: string[];
+	noindex?: boolean;
+}
+
+const {
+	title,
+	description = SITE_DESCRIPTION,
+	image,
+	ogType = 'website',
+	publishedTime,
+	modifiedTime,
+	tags,
+	noindex = false,
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="zh-Hant">
+	<head>
+		<BaseHead
+			title={title}
+			description={description}
+			image={image}
+			ogType={ogType}
+			publishedTime={publishedTime}
+			modifiedTime={modifiedTime}
+			tags={tags}
+			noindex={noindex}
+		/>
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=DM+Sans:wght@400;500;700&family=Noto+Sans+JP:wght@400;500;700&family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+TC:wght@400;600;700&display=swap"
+			rel="stylesheet"
+		/>
+	</head>
+	<body>
+		<Effects />
+		<SiteCursor />
+		<slot name="navbar" />
+		<main class="page-main">
+			<slot />
+		</main>
+		<SiteFooter />
+	</body>
+</html>

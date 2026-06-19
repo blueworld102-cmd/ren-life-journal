@@ -1,0 +1,138 @@
+---
+/**
+ * Effects.astro — 全站背景花瓣：緩慢漂浮、低調淡粉
+ * 自訂游標見 SiteCursor.astro
+ */
+
+const PETAL_COUNT = 18;
+
+const driftNames = ['petal-float-a', 'petal-float-b', 'petal-float-c'] as const;
+const shapeNames = ['is-teardrop', 'is-ellipse', 'is-sakura'] as const;
+
+const petals = Array.from({ length: PETAL_COUNT }, (_, i) => ({
+	left: `${((i * 41 + 7) % 90) + 5}%`,
+	top: `${((i * 29 + 11) % 82) + 8}%`,
+	delay: `${-((i * 2.3) % 22)}s`,
+	duration: `${18 + (i % 9) * 2}s`,
+	width: `${6 + (i % 4) * 2.5}px`,
+	height: `${10 + (i % 5) * 1.8}px`,
+	opacity: 0.18 + (i % 5) * 0.045,
+	mobileOpacity: 0.12 + (i % 4) * 0.03,
+	drift: driftNames[i % driftNames.length],
+	shape: shapeNames[i % shapeNames.length],
+	rotate: `${18 + (i % 7) * 8}deg`,
+	mobileHidden: i >= 8,
+}));
+---
+
+<div class="effects-layer sakura-layer" aria-hidden="true">
+	{
+		petals.map((petal) => (
+			<span
+				class:list={['sakura-petal', petal.shape, { 'is-mobile-hidden': petal.mobileHidden }]}
+				style={{
+					left: petal.left,
+					top: petal.top,
+					width: petal.width,
+					height: petal.height,
+					'--petal-opacity': petal.opacity,
+					'--petal-opacity-mobile': petal.mobileOpacity,
+					'--petal-rotate': petal.rotate,
+					animationDuration: petal.duration,
+					animationDelay: petal.delay,
+					animationName: petal.drift,
+				}}
+			/>
+		))
+	}
+</div>
+
+<style>
+	.effects-layer,
+	.sakura-layer {
+		position: fixed;
+		inset: 0;
+		overflow: hidden;
+		pointer-events: none;
+		z-index: 1;
+	}
+
+	.sakura-petal {
+		position: absolute;
+		display: block;
+		box-sizing: border-box;
+		opacity: var(--petal-opacity, 0.24);
+		background: linear-gradient(
+			145deg,
+			rgba(241, 221, 225, 0.55) 0%,
+			rgba(183, 110, 121, 0.2) 100%
+		);
+		box-shadow: 0 0 1px rgba(216, 195, 165, 0.18);
+		transform: rotate(var(--petal-rotate, 32deg));
+		animation-timing-function: ease-in-out;
+		animation-iteration-count: infinite;
+		will-change: transform;
+	}
+
+	.sakura-petal.is-sakura {
+		border-radius: 50% 0 50% 50%;
+	}
+
+	.sakura-petal.is-teardrop {
+		border-radius: 60% 40% 65% 35%;
+	}
+
+	.sakura-petal.is-ellipse {
+		border-radius: 50% 50% 45% 55%;
+	}
+
+	@media (max-width: 768px) {
+		.sakura-petal.is-mobile-hidden {
+			display: none;
+		}
+
+		.sakura-petal {
+			opacity: var(--petal-opacity-mobile, 0.18);
+		}
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.sakura-petal {
+			animation: none;
+			opacity: 0.22 !important;
+		}
+	}
+
+	@keyframes petal-float-a {
+		0%,
+		100% {
+			transform: translate3d(0, 0, 0) rotate(var(--petal-rotate, 28deg));
+		}
+		50% {
+			transform: translate3d(16px, -20px, 0) rotate(calc(var(--petal-rotate, 28deg) + 14deg));
+		}
+	}
+
+	@keyframes petal-float-b {
+		0%,
+		100% {
+			transform: translate3d(0, 0, 0) rotate(var(--petal-rotate, 52deg));
+		}
+		50% {
+			transform: translate3d(-14px, 18px, 0) rotate(calc(var(--petal-rotate, 52deg) - 12deg));
+		}
+	}
+
+	@keyframes petal-float-c {
+		0%,
+		100% {
+			transform: translate3d(0, 0, 0) rotate(var(--petal-rotate, 18deg));
+		}
+		33% {
+			transform: translate3d(10px, 12px, 0) rotate(calc(var(--petal-rotate, 18deg) + 10deg));
+		}
+		66% {
+			transform: translate3d(-8px, -14px, 0) rotate(calc(var(--petal-rotate, 18deg) - 8deg));
+		}
+	}
+</style>

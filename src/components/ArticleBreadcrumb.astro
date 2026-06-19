@@ -1,0 +1,75 @@
+---
+interface Props {
+	category: string;
+	title: string;
+}
+
+const { category, title } = Astro.props;
+const categoryHref = `/articles?category=${encodeURIComponent(category)}`;
+---
+
+<nav class="article-breadcrumb" aria-label="麵包屑導覽">
+	<ol>
+		<li><a href="/">Home</a></li>
+		<li><a href="/articles">Journal</a></li>
+		<li><a href={categoryHref}>{category}</a></li>
+		<li aria-current="page">{title}</li>
+	</ol>
+</nav>
+
+<style>
+	.article-breadcrumb {
+		max-width: 880px;
+		margin: 0 auto 1.25rem;
+	}
+
+	.article-breadcrumb ol {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 0.35rem 0.5rem;
+		margin: 0;
+		padding: 0;
+		list-style: none;
+		font-family: var(--font-body);
+		font-size: 0.74rem;
+		line-height: 1.6;
+		letter-spacing: 0.04em;
+		color: #8c8279;
+	}
+
+	.article-breadcrumb li {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.5rem;
+	}
+
+	.article-breadcrumb li:not(:last-child)::after {
+		content: '/';
+		color: #c4b8ad;
+	}
+
+	.article-breadcrumb a {
+		color: #7e746b;
+		text-decoration: none;
+		transition: color 0.2s ease;
+	}
+
+	.article-breadcrumb a:hover {
+		color: #b76e79;
+	}
+
+	.article-breadcrumb li[aria-current='page'] {
+		color: #5c534c;
+	}
+
+	@media (max-width: 768px) {
+		.article-breadcrumb {
+			margin-bottom: 1rem;
+		}
+
+		.article-breadcrumb li[aria-current='page'] {
+			overflow-wrap: anywhere;
+		}
+	}
+</style>

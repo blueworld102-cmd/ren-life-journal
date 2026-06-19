@@ -1,0 +1,71 @@
+---
+interface Props {
+	title: string;
+	description: string;
+	link: string;
+}
+
+const { title, description, link } = Astro.props;
+---
+
+<a href={link} class="category-row" data-cursor-hover>
+	<span class="category-title">{title}</span>
+	<span class="category-description">{description}</span>
+</a>
+
+<style>
+	.category-row {
+		display: grid;
+		grid-template-columns: minmax(140px, 220px) 1fr;
+		gap: 1.5rem;
+		align-items: baseline;
+		padding: 0.95rem 0;
+		text-decoration: none;
+		color: inherit;
+		border-bottom: 0.5px solid #e8ded2;
+		transition: color 0.2s ease;
+	}
+
+	.category-row:first-child {
+		border-top: 0.5px solid #e8ded2;
+	}
+
+	.category-title {
+		font-family: var(--font-display);
+		font-size: 1.05rem;
+		font-weight: 600;
+		letter-spacing: 0.04em;
+		color: var(--color-text-main);
+		transition: color 0.2s ease;
+	}
+
+	.category-description {
+		font-family: var(--font-body);
+		font-size: 0.88rem;
+		line-height: 1.65;
+		color: var(--color-text-muted);
+		transition: color 0.2s ease;
+	}
+
+	.category-row:hover .category-title,
+	.category-row:hover .category-description {
+		color: #b76e79;
+	}
+
+	@media (max-width: 768px) {
+		.category-row {
+			grid-template-columns: 1fr;
+			gap: 0.4rem;
+			padding: 0.9rem 0;
+		}
+
+		.category-title {
+			font-size: 1rem;
+		}
+
+		.category-description {
+			font-size: 0.84rem;
+			line-height: 1.7;
+		}
+	}
+</style>

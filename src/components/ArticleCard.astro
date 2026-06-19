@@ -1,0 +1,286 @@
+---
+interface Props {
+	href: string;
+	title: string;
+	description: string;
+	cover?: string;
+	coverPosition?: string;
+	category: string;
+	date: Date;
+	readingTime?: string;
+	location?: string;
+	weather?: string;
+	mood?: string;
+	tags?: string[];
+	searchText?: string;
+	filterCategory?: string;
+	filterTags?: string;
+	filterTopic?: string;
+	variant?: 'default' | 'featured' | 'compact';
+}
+
+const {
+	href,
+	title,
+	description,
+	cover,
+	coverPosition = 'center',
+	category,
+	date,
+	readingTime,
+	location,
+	weather,
+	mood,
+	tags = [],
+	searchText = '',
+	filterCategory = '',
+	filterTags = '',
+	filterTopic = '',
+	variant = 'default',
+} = Astro.props;
+
+const y = date.getFullYear();
+const m = String(date.getMonth() + 1).padStart(2, '0');
+const d = String(date.getDate()).padStart(2, '0');
+const stampDate = `${y}.${m}.${d}`;
+
+const contextLine = [stampDate, location, weather].filter(Boolean).join('｜');
+const moodLine = mood ? `心情：${mood}` : '';
+const readLine = readingTime ? `閱讀 ${readingTime}` : '';
+---
+
+<article
+	class:list={['article-card', `is-${variant}`]}
+	data-article-card
+	data-search={searchText}
+	data-category={filterCategory}
+	data-tags={filterTags}
+	data-topic={filterTopic}
+>
+	<a href={href} class="card-link" data-cursor-hover>
+		<div class="card-media" style={`--cover-position: ${coverPosition}`}>
+			{
+				cover ? (
+					<img src={cover} alt="" loading="lazy" style={`object-position: ${coverPosition}`} />
+				) : (
+					<div class="media-placeholder" aria-hidden="true" />
+				)
+			}
+		</div>
+
+		<div class="card-content">
+			<p class="stamp-category">{category}</p>
+
+			<h3 class="card-title">{title}</h3>
+			<p class="card-description">{description}</p>
+
+			<div class="stamp-block">
+				{contextLine && <p class="stamp-line">{contextLine}</p>}
+				{moodLine && <p class="stamp-line">{moodLine}</p>}
+				{readLine && <p class="stamp-line stamp-read">{readLine}</p>}
+			</div>
+
+			{
+				tags.length > 0 && variant !== 'compact' && (
+					<p class="tag-line">
+						{tags.map((tag) => `#${tag}`).join(' ')}
+					</p>
+				)
+			}
+		</div>
+	</a>
+</article>
+
+<style>
+	.article-card {
+		background: #ffffff;
+		border: 0.5px solid #e8ded2;
+		border-radius: 15px;
+		overflow: hidden;
+		transition: border-color 0.22s ease;
+	}
+
+	.article-card:hover {
+		border-color: rgba(183, 110, 121, 0.45);
+	}
+
+	.article-card.is-hidden {
+		display: none;
+	}
+
+	.card-link {
+		display: grid;
+		grid-template-columns: minmax(220px, 36%) 1fr;
+		text-decoration: none;
+		color: inherit;
+		min-height: 100%;
+	}
+
+	.card-media {
+		aspect-ratio: 3 / 2;
+		overflow: hidden;
+		background: #f1dde1;
+	}
+
+	.card-media img,
+	.media-placeholder {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		object-position: var(--cover-position, center);
+		transition: transform 0.4s ease;
+	}
+
+	.media-placeholder {
+		background: linear-gradient(145deg, #f1dde1 0%, #e8ded2 100%);
+	}
+
+	.article-card:hover .card-media img {
+		transform: scale(1.02);
+	}
+
+	.card-content {
+		display: flex;
+		flex-direction: column;
+		padding: 1.25rem 1.4rem 1.35rem;
+	}
+
+	.stamp-category {
+		margin: 0 0 0.5rem;
+		font-family: var(--font-body);
+		font-size: 0.75rem;
+		letter-spacing: 0.1em;
+		color: #b76e79;
+	}
+
+	.card-title {
+		margin: 0 0 0.5rem;
+		font-family: var(--font-display);
+		font-size: 1.2rem;
+		font-weight: 600;
+		line-height: 1.45;
+		color: var(--color-text-main);
+	}
+
+	.card-description {
+		margin: 0 0 0.85rem;
+		font-family: var(--font-body);
+		font-size: 0.88rem;
+		line-height: 1.7;
+		color: var(--color-text-muted);
+		display: -webkit-box;
+		-webkit-line-clamp: 2;
+		-webkit-box-orient: vertical;
+		overflow: hidden;
+	}
+
+	.stamp-block {
+		margin-top: auto;
+		padding-top: 0.75rem;
+		border-top: 1px solid #e8ded2;
+	}
+
+	.stamp-line {
+		margin: 0;
+		font-family: var(--font-body);
+		font-size: 0.74rem;
+		line-height: 1.65;
+		color: var(--color-text-muted);
+		letter-spacing: 0.02em;
+	}
+
+	.stamp-line + .stamp-line {
+		margin-top: 0.2rem;
+	}
+
+	.stamp-read {
+		color: #8c8279;
+	}
+
+	.tag-line {
+		margin: 0.65rem 0 0;
+		font-family: var(--font-body);
+		font-size: 0.72rem;
+		line-height: 1.6;
+		color: var(--color-text-muted);
+		letter-spacing: 0.02em;
+	}
+
+	/* Featured：首頁橫向大卡 */
+	.article-card.is-featured .card-link {
+		grid-template-columns: minmax(280px, 42%) 1fr;
+	}
+
+	.article-card.is-featured .card-media {
+		aspect-ratio: 16 / 10;
+		min-height: 220px;
+	}
+
+	.article-card.is-featured .card-title {
+		font-size: clamp(1.25rem, 2.5vw, 1.5rem);
+	}
+
+	.article-card.is-featured .card-description {
+		-webkit-line-clamp: 3;
+	}
+
+	.article-card.is-featured .card-content {
+		padding: 1.5rem 1.6rem 1.5rem;
+	}
+
+	/* Compact：首頁次要小卡 */
+	.article-card.is-compact .card-link {
+		grid-template-columns: 1fr;
+	}
+
+	.article-card.is-compact .card-media {
+		aspect-ratio: 16 / 9;
+		max-height: 180px;
+	}
+
+	.article-card.is-compact .card-content {
+		padding: 1rem 1.15rem 1.15rem;
+	}
+
+	.article-card.is-compact .card-title {
+		font-size: 1.05rem;
+	}
+
+	.article-card.is-compact .card-description {
+		-webkit-line-clamp: 2;
+		margin-bottom: 0.65rem;
+		font-size: 0.84rem;
+	}
+
+	.article-card.is-compact .stamp-block {
+		padding-top: 0.6rem;
+	}
+
+	@media (max-width: 768px) {
+		.card-link,
+		.article-card.is-featured .card-link {
+			grid-template-columns: 1fr;
+		}
+
+		.card-media,
+		.article-card.is-featured .card-media {
+			border-bottom: 0.5px solid #e8ded2;
+			min-height: auto;
+			max-height: 220px;
+			aspect-ratio: 16 / 9;
+		}
+
+		.card-title {
+			font-size: 1.1rem;
+			overflow-wrap: break-word;
+		}
+
+		.stamp-line {
+			overflow-wrap: anywhere;
+		}
+
+		.article-card.is-featured .card-content {
+			padding: 1.15rem 1.2rem 1.2rem;
+		}
+	}
+</style>

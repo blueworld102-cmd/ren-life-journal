@@ -1,0 +1,92 @@
+---
+interface Props {
+	inputId?: string;
+	redirectOnSubmit?: boolean;
+}
+
+const { inputId = 'article-search', redirectOnSubmit = false } = Astro.props;
+---
+
+<div class="nav-search">
+	<label class="sr-only" for={inputId}>搜尋文章</label>
+	<input
+		id={inputId}
+		class="nav-search-input"
+		type="search"
+		placeholder="搜尋文章標題、標籤、地點…"
+		autocomplete="off"
+		spellcheck="false"
+		data-redirect-on-submit={redirectOnSubmit ? 'true' : 'false'}
+	/>
+</div>
+
+<script>
+	function initNavSearch() {
+		const inputs = document.querySelectorAll<HTMLInputElement>('.nav-search-input');
+		inputs.forEach((input) => {
+			if (input.dataset.bound === 'true') return;
+			input.dataset.bound = 'true';
+
+			const shouldRedirect = input.dataset.redirectOnSubmit === 'true';
+			if (!shouldRedirect) return;
+
+			input.addEventListener('keydown', (event) => {
+				if (event.key !== 'Enter') return;
+				event.preventDefault();
+				const query = input.value.trim();
+				const url = query ? `/articles?search=${encodeURIComponent(query)}` : '/articles';
+				window.location.href = url;
+			});
+		});
+	}
+
+	initNavSearch();
+	document.addEventListener('astro:page-load', initNavSearch);
+</script>
+
+<style>
+	.nav-search {
+		flex-shrink: 0;
+		width: 200px;
+	}
+
+	.nav-search-input {
+		width: 100%;
+		padding: 0.55rem 0.9rem;
+		border: 1px solid var(--color-border);
+		border-radius: 999px;
+		background: var(--color-surface);
+		color: var(--color-text-main);
+		font: inherit;
+		font-size: 0.78rem;
+		outline: none;
+		transition: border-color 0.2s ease;
+	}
+
+	.nav-search-input:focus {
+		border-color: var(--color-primary);
+	}
+
+	.nav-search-input::placeholder {
+		color: var(--color-text-muted);
+	}
+
+	.sr-only {
+		position: absolute;
+		width: 1px;
+		height: 1px;
+		padding: 0;
+		margin: -1px;
+		overflow: hidden;
+		clip: rect(0, 0, 0, 0);
+		white-space: nowrap;
+		border: 0;
+	}
+
+	@media (max-width: 768px) {
+		.nav-search-input {
+			padding: 0.5rem 0.75rem;
+			font-size: 0.76rem;
+		}
+	}
+</style>

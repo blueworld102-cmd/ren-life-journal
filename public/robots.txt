@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://ren-life-journal.vercel.app/sitemap-index.xml

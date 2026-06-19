@@ -1,0 +1,93 @@
+---
+import SectionHeader from './SectionHeader.astro';
+import { siteBackgrounds } from '@/data/siteBackgrounds';
+import { siteProfile } from '@/data/siteProfile';
+
+const aboutBg = siteBackgrounds.windowCafe;
+const { aboutPage } = siteProfile;
+---
+
+<section class="section about-preview home-about">
+	<div class="about-card" style={`--about-accent: url('${aboutBg.src}')`}>
+		<div class="about-accent" role="presentation" aria-hidden="true"></div>
+		<div class="about-content">
+			<SectionHeader eyebrow="About" title={aboutPage.aboutPreviewTitle} />
+			<p class="about-copy">{siteProfile.shortBio}</p>
+			<p class="about-brand-note">
+				這是 <strong>{siteProfile.siteTitle}</strong> 的 Japan 篇章。未來也會記錄其他異鄉生活的片段。
+			</p>
+			<a href="/about" class="btn btn-secondary" data-cursor-hover>關於這個網站</a>
+		</div>
+	</div>
+</section>
+
+<style>
+	.home-about {
+		margin-bottom: 2.5rem;
+	}
+
+	.about-card {
+		position: relative;
+		display: grid;
+		grid-template-columns: minmax(0, 1fr);
+		padding: 1.75rem 2rem;
+		background: linear-gradient(135deg, #fff 0%, rgba(250, 247, 242, 0.95) 100%);
+		border: 0.5px solid rgba(232, 222, 210, 0.85);
+		border-radius: var(--radius-card);
+		box-shadow: var(--shadow);
+		overflow: hidden;
+	}
+
+	.about-accent {
+		position: absolute;
+		top: -12px;
+		right: -24px;
+		width: min(42%, 220px);
+		height: 160px;
+		background-image: var(--about-accent);
+		background-size: cover;
+		background-position: center;
+		border: 0.5px solid #e8ded2;
+		border-radius: 3px;
+		opacity: 0.22;
+		transform: rotate(2deg);
+		pointer-events: none;
+	}
+
+	.about-accent::after {
+		content: '';
+		position: absolute;
+		inset: 0;
+		background: rgba(255, 255, 255, 0.55);
+		border-radius: inherit;
+	}
+
+	.about-content {
+		position: relative;
+		z-index: 1;
+		max-width: 40rem;
+	}
+
+	.about-copy {
+		margin: 0 0 1rem;
+		font-size: 1.02rem;
+		line-height: 1.85;
+		color: var(--color-text);
+	}
+
+	.about-brand-note {
+		margin: 0 0 1.5rem;
+		font-size: 0.88rem;
+		line-height: 1.75;
+		color: var(--color-muted);
+	}
+
+	.about-brand-note strong {
+		font-weight: 500;
+		color: var(--color-text);
+	}
+
+	.about-content :global(.section-header) {
+		margin-bottom: 1.25rem;
+	}
+</style>

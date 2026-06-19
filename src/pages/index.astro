@@ -1,0 +1,96 @@
+---
+import BaseLayout from '@/components/BaseLayout.astro';
+import Navbar from '@/components/Navbar.astro';
+import HeroSection from '@/components/HeroSection.astro';
+import FeaturedCategories from '@/components/FeaturedCategories.astro';
+import StartHere from '@/components/StartHere.astro';
+import SectionHeader from '@/components/SectionHeader.astro';
+import ArticleCard from '@/components/ArticleCard.astro';
+import PhotoWallPreview from '@/components/PhotoWallPreview.astro';
+import AboutPreview from '@/components/AboutPreview.astro';
+import { getCollection } from 'astro:content';
+import { SITE_DESCRIPTION, SITE_SUBTITLE, SITE_TITLE } from '@/consts';
+import { siteCopy } from '@/data/siteCopy';
+import { getPublishedArticles, toArticleCardProps } from '@/utils/articles';
+
+const allArticles = await getCollection('articles');
+const articles = getPublishedArticles(allArticles);
+const latestArticles = articles.slice(0, 3).map(toArticleCardProps);
+const [featuredArticle, ...secondaryArticles] = latestArticles;
+
+const homeTitle = `${SITE_TITLE}｜${SITE_SUBTITLE}`;
+---
+
+<BaseLayout title={homeTitle} description={SITE_DESCRIPTION}>
+	<Navbar slot="navbar" currentPath={Astro.url.pathname} />
+
+	<HeroSection />
+
+	<FeaturedCategories />
+
+	<StartHere />
+
+	<section class="section latest-articles home-latest">
+		<div class="latest-head">
+			<SectionHeader
+				eyebrow="Latest"
+				title={siteCopy.latestTitle}
+				lead={siteCopy.latestSubtitle}
+			/>
+			<a href="/articles" class="btn btn-text">查看全部文章 →</a>
+		</div>
+
+		<div class="article-list">
+			{featuredArticle && <ArticleCard {...featuredArticle} variant="featured" />}
+			{
+				secondaryArticles.length > 0 && (
+					<div class="secondary-grid">
+						{secondaryArticles.map((article) => (
+							<ArticleCard {...article} variant="compact" />
+						))}
+					</div>
+				)
+			}
+		</div>
+	</section>
+
+	<PhotoWallPreview />
+
+	<AboutPreview />
+</BaseLayout>
+
+<style>
+	.home-latest {
+		margin-bottom: 3rem;
+	}
+
+	.latest-head {
+		display: flex;
+		justify-content: space-between;
+		align-items: flex-end;
+		gap: 1rem;
+		flex-wrap: wrap;
+		margin-bottom: 1.75rem;
+	}
+
+	.latest-head :global(.section-header) {
+		margin-bottom: 0;
+	}
+
+	.article-list {
+		display: grid;
+		gap: 1.25rem;
+	}
+
+	.secondary-grid {
+		display: grid;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		gap: 1.25rem;
+	}
+
+	@media (max-width: 767px) {
+		.secondary-grid {
+			grid-template-columns: 1fr;
+		}
+	}
+</style>

@@ -1,0 +1,45 @@
+---
+import CategoryIndexRow from './CategoryIndexRow.astro';
+import { FEATURED_CATEGORIES, INDEX_LEAD } from '@/consts';
+---
+
+<section class="featured-categories" aria-label="精選分類">
+	<header class="index-header">
+		<p class="index-eyebrow">INDEX</p>
+		<p class="index-lead">{INDEX_LEAD}</p>
+	</header>
+
+	<nav class="category-index">
+		{FEATURED_CATEGORIES.map((category) => <CategoryIndexRow {...category} />)}
+	</nav>
+</section>
+
+<style>
+	.featured-categories {
+		margin-bottom: 2.75rem;
+	}
+
+	.index-header {
+		margin-bottom: 1rem;
+	}
+
+	.index-eyebrow {
+		margin: 0 0 0.35rem;
+		font-family: var(--font-body);
+		font-size: 0.72rem;
+		letter-spacing: 0.24em;
+		color: var(--color-text-muted);
+	}
+
+	.index-lead {
+		margin: 0;
+		font-family: var(--font-body);
+		font-size: 0.92rem;
+		color: var(--color-text-muted);
+	}
+
+	.category-index {
+		display: flex;
+		flex-direction: column;
+	}
+</style>

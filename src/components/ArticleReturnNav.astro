@@ -1,0 +1,52 @@
+---
+import { JAPAN_TOPIC_LABEL } from '@/consts';
+---
+
+<nav class="article-return" aria-label="返回導覽">
+	<a href="/articles" class="return-link" data-cursor-hover>← 回到 Journal</a>
+	<a href="/articles?topic=japan" class="return-link" data-cursor-hover>
+		← 回到 {JAPAN_TOPIC_LABEL}
+	</a>
+</nav>
+
+<style>
+	.article-return {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.65rem;
+		margin-top: 2.5rem;
+		padding-top: 1.75rem;
+		border-top: 0.5px solid #e8ded2;
+	}
+
+	.return-link {
+		display: inline-flex;
+		align-items: center;
+		padding: 0.45rem 0.9rem;
+		border: 0.5px solid #e8ded2;
+		border-radius: 999px;
+		background: #fff;
+		font-size: 0.8rem;
+		letter-spacing: 0.06em;
+		color: #7e746b;
+		text-decoration: none;
+		transition: border-color 0.2s ease, color 0.2s ease;
+	}
+
+	.return-link:hover {
+		border-color: #b76e79;
+		color: #b76e79;
+	}
+
+	@media (max-width: 768px) {
+		.article-return {
+			margin-top: 2rem;
+			padding-top: 1.5rem;
+		}
+
+		.return-link {
+			padding: 0.55rem 1rem;
+			min-height: 44px;
+		}
+	}
+</style>

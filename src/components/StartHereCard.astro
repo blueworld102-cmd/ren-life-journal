@@ -1,0 +1,128 @@
+---
+interface Props {
+	title: string;
+	description: string;
+	linkLabel: string;
+	href: string;
+	coverImage: string;
+	coverAlt: string;
+}
+
+const { title, description, linkLabel, href, coverImage, coverAlt } = Astro.props;
+---
+
+<a href={href} class="start-card" data-cursor-hover>
+	<div
+		class="start-cover"
+		style={`background-image: url('${coverImage}')`}
+		role="img"
+		aria-label={coverAlt}
+	>
+	</div>
+	<div class="start-body">
+		<h3 class="start-title">{title}</h3>
+		<p class="start-description">{description}</p>
+		<span class="start-link-label">{linkLabel} →</span>
+	</div>
+</a>
+
+<style>
+	.start-card {
+		display: flex;
+		flex-direction: column;
+		max-height: 380px;
+		background: #ffffff;
+		border: 0.5px solid #e8ded2;
+		border-radius: 14px;
+		overflow: hidden;
+		text-decoration: none;
+		color: inherit;
+		transition: border-color 0.22s ease;
+	}
+
+	.start-card:hover {
+		border-color: #b76e79;
+	}
+
+	.start-cover {
+		position: relative;
+		flex-shrink: 0;
+		height: 190px;
+		overflow: hidden;
+		background-color: #f1dde1;
+		background-size: cover;
+		background-position: center;
+	}
+
+	.start-cover::after {
+		content: '';
+		position: absolute;
+		inset: 0;
+		background: rgba(255, 255, 255, 0.52);
+		pointer-events: none;
+		transition: background 0.35s ease;
+	}
+
+	.start-card:hover .start-cover::after {
+		background: rgba(255, 255, 255, 0.42);
+	}
+
+	.start-body {
+		display: flex;
+		flex-direction: column;
+		flex: 1;
+		min-height: 0;
+		padding: 1.1rem 1.2rem 1.25rem;
+	}
+
+	.start-title {
+		margin: 0 0 0.5rem;
+		font-family: var(--font-display);
+		font-size: 1.05rem;
+		font-weight: 600;
+		line-height: 1.4;
+	}
+
+	.start-description {
+		margin: 0;
+		flex: 1;
+		font-family: var(--font-body);
+		font-size: 0.84rem;
+		line-height: 1.65;
+		color: var(--color-text-muted);
+		display: -webkit-box;
+		-webkit-line-clamp: 4;
+		-webkit-box-orient: vertical;
+		overflow: hidden;
+	}
+
+	.start-link-label {
+		margin-top: 0.85rem;
+		font-size: 0.76rem;
+		letter-spacing: 0.1em;
+		color: #b76e79;
+	}
+
+	@media (max-width: 768px) {
+		.start-card {
+			max-height: none;
+		}
+
+		.start-cover {
+			height: 150px;
+		}
+
+		.start-cover::after {
+			background: rgba(255, 255, 255, 0.35);
+		}
+
+		.start-title {
+			font-size: 0.98rem;
+		}
+
+		.start-description {
+			font-size: 0.8rem;
+			-webkit-line-clamp: 3;
+		}
+	}
+</style>

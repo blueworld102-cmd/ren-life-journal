@@ -1,0 +1,83 @@
+---
+import StartHereCard from './StartHereCard.astro';
+import { siteCopy } from '@/data/siteCopy';
+import { startHereItems } from '@/data/startHere';
+---
+
+<section class="start-here" aria-label="Start Here">
+	<div class="start-here-inner">
+		<header class="start-here-header">
+			<h2 class="start-here-title">{siteCopy.startHereTitle}</h2>
+			<p class="start-here-lead">{siteCopy.startHereSubtitle}</p>
+		</header>
+
+		<div class="start-grid">
+			{
+				startHereItems.map((item) => (
+					<StartHereCard
+						title={item.title}
+						description={item.description}
+						linkLabel={item.linkLabel}
+						href={item.href}
+						coverImage={item.image}
+						coverAlt={item.imageAlt}
+					/>
+				))
+			}
+		</div>
+	</div>
+</section>
+
+<style>
+	.start-here {
+		margin-bottom: 3rem;
+	}
+
+	.start-here-inner {
+		padding: 1.35rem 1.5rem;
+		background: rgba(241, 221, 225, 0.18);
+		border: 0.5px solid #e8ded2;
+		border-radius: 14px;
+	}
+
+	.start-here-header {
+		margin-bottom: 1.25rem;
+	}
+
+	.start-here-title {
+		margin: 0 0 0.4rem;
+		font-family: var(--font-display);
+		font-size: clamp(1.35rem, 3vw, 1.75rem);
+		font-weight: 600;
+	}
+
+	.start-here-lead {
+		margin: 0;
+		font-size: 0.9rem;
+		line-height: 1.7;
+		color: var(--color-text-muted);
+	}
+
+	.start-grid {
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		gap: 24px;
+		align-items: stretch;
+	}
+
+	@media (max-width: 1023px) {
+		.start-grid {
+			grid-template-columns: repeat(2, 1fr);
+		}
+	}
+
+	@media (max-width: 767px) {
+		.start-here-inner {
+			padding: 1.25rem;
+		}
+
+		.start-grid {
+			grid-template-columns: 1fr;
+		}
+	}
+</style>

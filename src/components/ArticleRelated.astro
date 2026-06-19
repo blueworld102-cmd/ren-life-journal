@@ -1,0 +1,112 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { formatArticleDate } from '@/utils/articles';
+
+interface Props {
+	articles: CollectionEntry<'articles'>[];
+}
+
+const { articles } = Astro.props;
+---
+
+{
+	articles.length > 0 && (
+		<section class="related-posts" aria-labelledby="related-posts-heading">
+	<h2 id="related-posts-heading" class="related-heading">Related Posts</h2>
+	<div class="related-grid">
+		{
+			articles.map((article) => {
+				const { title, category, pubDate, location, weather } = article.data;
+				const context = [location, weather].filter(Boolean).join(' · ');
+				return (
+					<a href={`/articles/${article.id}/`} class="related-card" data-cursor-hover>
+						<p class="related-category">{category}</p>
+						<h3 class="related-title">{title}</h3>
+						{context && <p class="related-context">{context}</p>}
+						<time class="related-date" datetime={pubDate.toISOString()}>
+							{formatArticleDate(pubDate)}
+						</time>
+					</a>
+				);
+			})
+		}
+		</div>
+	</section>
+	)
+}
+
+<style>
+	.related-posts {
+		margin-top: 2.5rem;
+		padding-top: 2rem;
+		border-top: 0.5px solid #e8ded2;
+	}
+
+	.related-heading {
+		margin: 0 0 1.25rem;
+		font-family: var(--font-body);
+		font-size: 0.72rem;
+		font-weight: 500;
+		letter-spacing: 0.22em;
+		text-transform: uppercase;
+		color: var(--color-text-muted);
+	}
+
+	.related-grid {
+		display: grid;
+		grid-template-columns: repeat(3, minmax(0, 1fr));
+		gap: 1rem;
+	}
+
+	.related-card {
+		display: flex;
+		flex-direction: column;
+		gap: 0.35rem;
+		padding: 1.1rem 1.15rem;
+		background: #fff;
+		border: 0.5px solid #e8ded2;
+		border-radius: 14px;
+		text-decoration: none;
+		color: inherit;
+		transition: border-color 0.2s ease;
+	}
+
+	.related-card:hover {
+		border-color: rgba(183, 110, 121, 0.45);
+	}
+
+	.related-category {
+		margin: 0;
+		font-size: 0.72rem;
+		letter-spacing: 0.08em;
+		color: #b76e79;
+	}
+
+	.related-title {
+		margin: 0;
+		font-family: var(--font-display);
+		font-size: 0.95rem;
+		font-weight: 600;
+		line-height: 1.45;
+		color: var(--color-text-main);
+	}
+
+	.related-context,
+	.related-date {
+		margin: 0;
+		font-size: 0.74rem;
+		color: var(--color-text-muted);
+	}
+
+	@media (max-width: 900px) {
+		.related-grid {
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+		}
+	}
+
+	@media (max-width: 560px) {
+		.related-grid {
+			grid-template-columns: 1fr;
+		}
+	}
+</style>

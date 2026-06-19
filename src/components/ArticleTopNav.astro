@@ -1,0 +1,54 @@
+---
+/** 文章頁頂部直覺返回 — breadcrumb 上方 */
+---
+
+<nav class="article-top-nav" aria-label="文章頁返回導覽">
+	<a href="/articles" class="top-nav-link primary" data-cursor-hover aria-label="回到 Journal 文章列表">
+		← 回到 Journal
+	</a>
+	<a href="/" class="top-nav-link" data-cursor-hover aria-label="回到首頁">
+		Home
+	</a>
+</nav>
+
+<style>
+	.article-top-nav {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 0.5rem 0.75rem;
+		max-width: 880px;
+		margin: 0 auto 0.85rem;
+	}
+
+	.top-nav-link {
+		display: inline-flex;
+		align-items: center;
+		padding: 0.4rem 0.85rem;
+		border: 0.5px solid #e8ded2;
+		border-radius: 999px;
+		background: #fff;
+		font-family: var(--font-body);
+		font-size: 0.78rem;
+		letter-spacing: 0.06em;
+		color: #7e746b;
+		text-decoration: none;
+		transition: border-color 0.2s ease, color 0.2s ease;
+	}
+
+	.top-nav-link.primary {
+		color: #5c534c;
+	}
+
+	.top-nav-link:hover {
+		border-color: #b76e79;
+		color: #b76e79;
+	}
+
+	@media (max-width: 768px) {
+		.top-nav-link {
+			min-height: 44px;
+			padding: 0.5rem 1rem;
+		}
+	}
+</style>

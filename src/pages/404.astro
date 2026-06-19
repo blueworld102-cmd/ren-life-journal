@@ -1,0 +1,114 @@
+---
+import BaseLayout from '@/components/BaseLayout.astro';
+import Navbar from '@/components/Navbar.astro';
+import { SITE_SUBTITLE, SITE_TITLE } from '@/consts';
+import { siteBackgrounds } from '@/data/siteBackgrounds';
+
+const pageTitle = `迷路了｜${SITE_TITLE}`;
+const pageDescription = '這個頁面可能已經搬家，或還沒有被寫成故事。';
+const accentBg = siteBackgrounds.travelDesk;
+---
+
+<BaseLayout title={pageTitle} description={pageDescription}>
+	<Navbar slot="navbar" currentPath={Astro.url.pathname} />
+
+	<section class="not-found" style={`--accent-bg: url('${accentBg.src}')`}>
+		<div class="not-found-accent" role="presentation" aria-hidden="true"></div>
+		<div class="not-found-content">
+			<p class="not-found-eyebrow">{SITE_SUBTITLE}</p>
+			<h1 class="not-found-title">迷路了，也沒關係。</h1>
+			<p class="not-found-lead">
+				這個頁面可能已經搬家，或還沒有被寫成故事。
+			</p>
+			<div class="not-found-actions">
+				<a href="/" class="btn btn-outline" data-cursor-hover>回到首頁</a>
+				<a href="/articles" class="btn btn-secondary" data-cursor-hover>閱讀 Journal</a>
+			</div>
+		</div>
+	</section>
+</BaseLayout>
+
+<style>
+	.not-found {
+		position: relative;
+		max-width: 640px;
+		margin: 2rem auto 4rem;
+		padding: 2.5rem 2rem;
+		overflow: hidden;
+	}
+
+	.not-found-accent {
+		position: absolute;
+		top: 0.5rem;
+		right: -1rem;
+		width: 180px;
+		height: 130px;
+		background-image: var(--accent-bg);
+		background-size: cover;
+		background-position: center;
+		border: 0.5px solid #e8ded2;
+		border-radius: 6px;
+		opacity: 0.2;
+		transform: rotate(4deg);
+		pointer-events: none;
+	}
+
+	.not-found-accent::after {
+		content: '';
+		position: absolute;
+		inset: 0;
+		background: rgba(255, 255, 255, 0.55);
+		border-radius: inherit;
+	}
+
+	.not-found-content {
+		position: relative;
+		z-index: 1;
+	}
+
+	.not-found-eyebrow {
+		margin: 0 0 0.75rem;
+		font-size: 0.72rem;
+		letter-spacing: 0.18em;
+		color: var(--color-text-muted);
+	}
+
+	.not-found-title {
+		margin: 0 0 1rem;
+		font-family: 'Noto Serif TC', 'Yu Mincho', var(--font-display), serif;
+		font-size: clamp(1.75rem, 4vw, 2.35rem);
+		font-weight: 600;
+		line-height: 1.35;
+		color: var(--color-text-main);
+	}
+
+	.not-found-lead {
+		margin: 0 0 1.75rem;
+		font-size: 1rem;
+		line-height: 1.85;
+		color: #7e746b;
+	}
+
+	.not-found-actions {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.75rem;
+	}
+
+	@media (max-width: 768px) {
+		.not-found {
+			margin: 1rem auto 3rem;
+			padding: 2rem 0;
+		}
+
+		.not-found-accent {
+			width: 140px;
+			height: 100px;
+			opacity: 0.14;
+		}
+
+		.not-found-actions .btn {
+			min-height: 44px;
+		}
+	}
+</style>

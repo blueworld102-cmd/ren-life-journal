@@ -1,0 +1,190 @@
+---
+import SectionHeader from './SectionHeader.astro';
+import { PHOTO_PREVIEW_ITEMS } from '@/data/photos';
+import { siteCopy } from '@/data/siteCopy';
+import { normalizeCoverPosition } from '@/utils/articles';
+
+function photoPosition(position?: string) {
+	return normalizeCoverPosition(position);
+}
+---
+
+<section class="section photo-preview home-photo-preview">
+	<div class="photo-preview-head">
+		<SectionHeader
+			eyebrow="Photo Wall"
+			title={siteCopy.photoWallTitle}
+			lead={siteCopy.photoWallSubtitle}
+		/>
+		<a href="/photos" class="btn btn-text">查看全部照片 →</a>
+	</div>
+
+	<div class="photo-grid">
+		{
+			PHOTO_PREVIEW_ITEMS.map((photo) => {
+				const imgPos = photoPosition(photo.imagePosition);
+				return photo.relatedPost ? (
+					<a href={photo.relatedPost} class="photo-card is-link" data-cursor-hover>
+						<div class="photo-image" style={`--image-position: ${imgPos}`}>
+							<img
+								src={photo.image}
+								alt={photo.alt}
+								loading="lazy"
+								style={`object-position: ${imgPos}`}
+							/>
+						</div>
+						<div class="photo-body">
+							<h3>{photo.title}</h3>
+							<p class="photo-meta">
+								<span>{photo.location}</span>
+								<span>{photo.date}</span>
+							</p>
+							<p class="photo-context">
+								{photo.weather} · {photo.mood}
+							</p>
+						</div>
+					</a>
+				) : (
+					<div class="photo-card">
+						<div class="photo-image" style={`--image-position: ${imgPos}`}>
+							<img
+								src={photo.image}
+								alt={photo.alt}
+								loading="lazy"
+								style={`object-position: ${imgPos}`}
+							/>
+						</div>
+						<div class="photo-body">
+							<h3>{photo.title}</h3>
+							<p class="photo-meta">
+								<span>{photo.location}</span>
+								<span>{photo.date}</span>
+							</p>
+							<p class="photo-context">
+								{photo.weather} · {photo.mood}
+							</p>
+						</div>
+					</div>
+				);
+			})
+		}
+	</div>
+</section>
+
+<style>
+	.home-photo-preview {
+		margin-bottom: 3rem;
+	}
+
+	.photo-preview-head {
+		display: flex;
+		justify-content: space-between;
+		align-items: flex-end;
+		gap: 1rem;
+		flex-wrap: wrap;
+		margin-bottom: 1.75rem;
+	}
+
+	.photo-preview-head :global(.section-header) {
+		margin-bottom: 0;
+	}
+
+	.photo-grid {
+		display: grid;
+		grid-template-columns: repeat(3, minmax(0, 1fr));
+		gap: 1.25rem;
+	}
+
+	.photo-card {
+		display: block;
+		background: var(--color-surface);
+		border: 1px solid var(--color-border);
+		border-radius: var(--radius-card);
+		overflow: hidden;
+		box-shadow: var(--shadow);
+		text-decoration: none;
+		color: inherit;
+		transition: box-shadow 0.22s ease, transform 0.22s ease;
+	}
+
+	.photo-card.is-link:hover {
+		transform: translateY(-2px);
+		box-shadow: var(--shadow-hover);
+	}
+
+	.photo-image {
+		position: relative;
+		aspect-ratio: 4 / 3;
+		overflow: hidden;
+		background: var(--color-accent-soft);
+	}
+
+	.photo-image::after {
+		content: '';
+		position: absolute;
+		inset: 0;
+		background: rgba(255, 255, 255, 0.18);
+		pointer-events: none;
+		transition: background 0.35s ease;
+	}
+
+	.photo-card:hover .photo-image::after {
+		background: rgba(255, 255, 255, 0.08);
+	}
+
+	.photo-image img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		object-position: var(--image-position, center);
+		transition: transform 0.35s ease;
+	}
+
+	.photo-card:hover .photo-image img {
+		transform: scale(1.03);
+	}
+
+	.photo-body {
+		padding: 1rem 1.1rem 1.15rem;
+	}
+
+	.photo-body h3 {
+		margin: 0 0 0.45rem;
+		font-family: var(--font-title);
+		font-size: 0.98rem;
+		font-weight: 600;
+	}
+
+	.photo-meta,
+	.photo-context {
+		margin: 0;
+		font-size: 0.76rem;
+		letter-spacing: 0.06em;
+		color: var(--color-muted);
+	}
+
+	.photo-meta {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.35rem 0.75rem;
+		margin-bottom: 0.25rem;
+	}
+
+	@media (max-width: 900px) {
+		.photo-grid {
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+		}
+	}
+
+	@media (max-width: 560px) {
+		.photo-grid {
+			grid-template-columns: 1fr;
+		}
+	}
+
+	@media (max-width: 768px) {
+		.photo-image::after {
+			background: rgba(255, 255, 255, 0.08);
+		}
+	}
+</style>

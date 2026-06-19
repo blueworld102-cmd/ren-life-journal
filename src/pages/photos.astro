@@ -1,0 +1,184 @@
+---
+import BaseLayout from '@/components/BaseLayout.astro';
+import Navbar from '@/components/Navbar.astro';
+import { PHOTOS } from '@/data/photos';
+import { SITE_TITLE } from '@/consts';
+import { normalizeCoverPosition } from '@/utils/articles';
+
+const pageTitle = `照片牆｜${SITE_TITLE}`;
+const pageDescription = '用影像記錄在日本的街景、日常與季節變化。';
+---
+
+<BaseLayout title={pageTitle} description={pageDescription}>
+	<Navbar slot="navbar" currentPath={Astro.url.pathname} />
+
+	<header class="page-hero">
+		<p class="page-kicker">Photo Wall</p>
+		<h1 class="page-title">照片牆</h1>
+		<p class="page-lead">用靜態格線整理旅途與日常，像翻閱一本隨身攜帶的相簿。</p>
+	</header>
+
+	<section class="photo-grid" aria-label="照片牆">
+		{
+			PHOTOS.map((photo) => {
+				const imgPos = normalizeCoverPosition(photo.imagePosition);
+				return (
+				<figure class="photo-card">
+					<div class="photo-frame" style={`--image-position: ${imgPos}`}>
+						<img
+							src={photo.image}
+							alt={photo.alt}
+							loading="lazy"
+							style={`object-position: ${imgPos}`}
+						/>
+					</div>
+					<figcaption>
+						<span class="photo-caption">{photo.title}</span>
+						<span class="photo-location">{photo.location} · {photo.date}</span>
+						<span class="photo-context">{photo.weather} · {photo.mood}</span>
+						{
+							photo.relatedPost && (
+								<a href={photo.relatedPost} class="photo-link">
+									相關文章 →
+								</a>
+							)
+						}
+					</figcaption>
+				</figure>
+				);
+			})
+		}
+	</section>
+</BaseLayout>
+
+<style>
+	.page-hero {
+		margin-bottom: 2.5rem;
+		padding-bottom: 2rem;
+		border-bottom: 1px solid var(--color-border);
+	}
+
+	.page-kicker {
+		margin: 0 0 0.75rem;
+		font-size: 0.72rem;
+		letter-spacing: 0.28em;
+		text-transform: uppercase;
+		color: var(--color-muted);
+	}
+
+	.page-title {
+		margin: 0 0 0.85rem;
+		font-family: 'Noto Serif TC', 'Yu Mincho', serif;
+		font-size: clamp(2rem, 5vw, 2.75rem);
+		font-weight: 600;
+		line-height: 1.25;
+		letter-spacing: 0.04em;
+	}
+
+	.page-lead {
+		margin: 0;
+		max-width: 36rem;
+		color: var(--color-muted);
+		font-size: 1rem;
+		line-height: 1.8;
+	}
+
+	.photo-grid {
+		display: grid;
+		grid-template-columns: repeat(3, minmax(0, 1fr));
+		gap: 1.5rem;
+	}
+
+	.photo-card {
+		margin: 0;
+		background: #fff;
+		border: 1px solid var(--color-border);
+		box-shadow: var(--shadow);
+		overflow: hidden;
+		transition: transform 0.25s ease, box-shadow 0.25s ease;
+	}
+
+	.photo-card:hover {
+		transform: translateY(-3px);
+		box-shadow: 0 10px 32px rgba(46, 42, 39, 0.1);
+	}
+
+	.photo-frame {
+		overflow: hidden;
+		aspect-ratio: 4 / 5;
+		background: var(--color-accent-soft);
+	}
+
+	.photo-frame img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		object-position: var(--image-position, center);
+		transition: transform 0.4s ease;
+	}
+
+	.photo-card:hover .photo-frame img {
+		transform: scale(1.04);
+	}
+
+	.photo-card figcaption {
+		display: flex;
+		flex-direction: column;
+		gap: 0.25rem;
+		padding: 0.9rem 1rem 1.1rem;
+		border-top: 1px solid var(--line);
+	}
+
+	.photo-caption {
+		font-family: 'Noto Serif TC', 'Yu Mincho', serif;
+		font-size: 0.95rem;
+		letter-spacing: 0.04em;
+	}
+
+	.photo-location {
+		font-size: 0.75rem;
+		letter-spacing: 0.08em;
+		color: var(--color-muted);
+	}
+
+	.photo-context {
+		font-size: 0.72rem;
+		letter-spacing: 0.06em;
+		color: var(--color-muted);
+	}
+
+	.photo-link {
+		margin-top: 0.35rem;
+		font-size: 0.74rem;
+		letter-spacing: 0.06em;
+		color: var(--color-primary);
+		text-decoration: none;
+	}
+
+	.photo-link:hover {
+		text-decoration: underline;
+	}
+
+	@media (max-width: 900px) {
+		.photo-grid {
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+		}
+	}
+
+	@media (max-width: 560px) {
+		.photo-grid {
+			grid-template-columns: 1fr;
+		}
+	}
+
+	@media (max-width: 768px) {
+		.page-hero {
+			margin-bottom: 2rem;
+			padding-bottom: 1.5rem;
+		}
+
+		.page-title {
+			font-size: clamp(1.65rem, 6vw, 2.25rem);
+		}
+	}
+</style>

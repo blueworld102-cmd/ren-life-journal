@@ -1,0 +1,117 @@
+---
+interface Props {
+	slug: string;
+}
+
+const { slug } = Astro.props;
+const editPath = `src/content/articles/${slug}.md`;
+const isDev = import.meta.env.DEV;
+---
+
+{
+	isDev && (
+		<aside class="dev-edit" data-dev-only>
+			<p class="dev-edit-label">Edit this article</p>
+			<p class="dev-edit-path">請在 Cursor 中開啟：</p>
+			<code class="dev-edit-code">{editPath}</code>
+			<button type="button" class="dev-edit-copy" data-copy-path={editPath}>
+				複製路徑
+			</button>
+		</aside>
+	)
+}
+
+<script>
+	function initDevEditCopy() {
+		document.querySelectorAll<HTMLButtonElement>('.dev-edit-copy').forEach((button) => {
+			if (button.dataset.bound === 'true') return;
+			button.dataset.bound = 'true';
+
+			button.addEventListener('click', async () => {
+				const path = button.dataset.copyPath;
+				if (!path) return;
+				try {
+					await navigator.clipboard.writeText(path);
+					const original = button.textContent;
+					button.textContent = '已複製';
+					window.setTimeout(() => {
+						button.textContent = original;
+					}, 1600);
+				} catch {
+					button.textContent = '複製失敗';
+				}
+			});
+		});
+	}
+
+	initDevEditCopy();
+	document.addEventListener('astro:page-load', initDevEditCopy);
+</script>
+
+<style>
+	.dev-edit {
+		margin-top: 1.5rem;
+		padding: 0.85rem 1rem;
+		border: 1px dashed rgba(183, 110, 121, 0.45);
+		border-radius: 10px;
+		background: rgba(241, 221, 225, 0.2);
+	}
+
+	.dev-edit-label {
+		margin: 0 0 0.35rem;
+		font-size: 0.72rem;
+		font-weight: 600;
+		letter-spacing: 0.1em;
+		text-transform: uppercase;
+		color: #b76e79;
+	}
+
+	.dev-edit-path {
+		margin: 0 0 0.35rem;
+		font-size: 0.78rem;
+		color: #7e746b;
+	}
+
+	.dev-edit-code {
+		display: block;
+		margin: 0 0 0.65rem;
+		padding: 0.45rem 0.55rem;
+		border-radius: 6px;
+		background: rgba(255, 255, 255, 0.7);
+		font-size: 0.76rem;
+		color: #5c534c;
+		word-break: break-all;
+	}
+
+	.dev-edit-copy {
+		padding: 0.35rem 0.75rem;
+		border: 0.5px solid #e8ded2;
+		border-radius: 999px;
+		background: #fff;
+		font: inherit;
+		font-size: 0.74rem;
+		color: #7e746b;
+		cursor: pointer;
+		transition: border-color 0.2s ease, color 0.2s ease;
+	}
+
+	.dev-edit-copy:hover {
+		border-color: #b76e79;
+		color: #b76e79;
+	}
+
+	@media (max-width: 768px) {
+		.dev-edit {
+			margin-top: 1.25rem;
+			padding: 0.75rem 0.85rem;
+		}
+
+		.dev-edit-code {
+			font-size: 0.72rem;
+		}
+
+		.dev-edit-copy {
+			min-height: 40px;
+		}
+	}
+</style>

@@ -1,0 +1,25 @@
+{
+  "name": "japan-wh-blog",
+  "type": "module",
+  "version": "0.0.1",
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "scripts": {
+    "dev": "astro dev",
+    "dev:host": "astro dev --host 0.0.0.0",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro",
+    "new:article": "node scripts/new-article.mjs",
+    "check:assets": "node scripts/check-assets.mjs",
+    "seed:images": "node scripts/seed-site-images.mjs"
+  },
+  "dependencies": {
+    "@astrojs/mdx": "^6.0.3",
+    "@astrojs/rss": "^4.0.18",
+    "@astrojs/sitemap": "^3.7.3",
+    "astro": "^6.4.7",
+    "sharp": "^0.34.3"
+  }
+}

@@ -1,0 +1,232 @@
+---
+import BaseLayout from '@/components/BaseLayout.astro';
+import Navbar from '@/components/Navbar.astro';
+import ExternalLinks from '@/components/ExternalLinks.astro';
+import { siteProfile } from '@/data/siteProfile';
+import { getActiveExternalLinks } from '@/utils/externalLinks';
+
+const { aboutPage } = siteProfile;
+const activeLinks = getActiveExternalLinks();
+const pageTitle = `關於我｜${siteProfile.siteTitle}`;
+const pageDescription = siteProfile.longBio;
+---
+
+<BaseLayout title={pageTitle} description={pageDescription}>
+	<Navbar slot="navbar" currentPath={Astro.url.pathname} />
+
+	<header class="page-hero">
+		<p class="page-kicker">About</p>
+		<h1 class="page-title">關於我</h1>
+		<p class="page-lead">{aboutPage.pageLead}</p>
+	</header>
+
+	<div class="about-layout">
+		<aside class="about-aside">
+			<figure class="portrait">
+				<div class="portrait-placeholder" aria-hidden="true"></div>
+				<figcaption>{aboutPage.contact.portraitCaption}</figcaption>
+			</figure>
+		</aside>
+
+		<div class="about-content">
+			<section class="content-block">
+				<h2>自我介紹</h2>
+				{aboutPage.intro.map((paragraph) => <p>{paragraph}</p>)}
+			</section>
+
+			<section class="content-block">
+				<h2>{aboutPage.whyBlog.title}</h2>
+				{aboutPage.whyBlog.paragraphs.map((paragraph) => <p>{paragraph}</p>)}
+				<ul>
+					{aboutPage.whyBlog.bullets.map((item) => <li>{item}</li>)}
+				</ul>
+			</section>
+
+			<section class="content-block">
+				<h2>聯絡方式</h2>
+				<p>{aboutPage.contact.intro}</p>
+				<dl class="contact-list">
+					<div>
+						<dt>Email</dt>
+						<dd>{siteProfile.contactLabel}</dd>
+					</div>
+					{
+						activeLinks.length > 0 && (
+							<div>
+								<dt>外部連結</dt>
+								<dd>
+									<ExternalLinks ariaLabel="社群與外部連結" class="about-external-links" />
+								</dd>
+							</div>
+						)
+					}
+					<div>
+						<dt>回覆時間</dt>
+						<dd>{aboutPage.contact.responseTime}</dd>
+					</div>
+				</dl>
+			</section>
+		</div>
+	</div>
+</BaseLayout>
+
+<style>
+	.page-hero {
+		margin-bottom: 2.5rem;
+		padding-bottom: 2rem;
+		border-bottom: 1px solid var(--line);
+	}
+
+	.page-kicker {
+		margin: 0 0 0.75rem;
+		font-size: 0.72rem;
+		letter-spacing: 0.28em;
+		text-transform: uppercase;
+		color: var(--ink-muted);
+	}
+
+	.page-title {
+		margin: 0 0 0.85rem;
+		font-family: 'Noto Serif TC', 'Yu Mincho', serif;
+		font-size: clamp(2rem, 5vw, 2.75rem);
+		font-weight: 600;
+		line-height: 1.25;
+		letter-spacing: 0.04em;
+	}
+
+	.page-lead {
+		margin: 0;
+		max-width: 36rem;
+		color: var(--ink-muted);
+		font-size: 1rem;
+		line-height: 1.8;
+	}
+
+	.about-layout {
+		display: grid;
+		grid-template-columns: minmax(220px, 320px) 1fr;
+		gap: 2.5rem;
+		align-items: start;
+	}
+
+	.portrait {
+		margin: 0;
+		background: #fff;
+		border: 1px solid var(--line);
+		box-shadow: var(--shadow);
+		overflow: hidden;
+	}
+
+	.portrait-placeholder {
+		width: 100%;
+		aspect-ratio: 4 / 5;
+		background:
+			radial-gradient(circle at 30% 20%, rgba(241, 221, 225, 0.9), transparent 45%),
+			linear-gradient(160deg, #faf7f2 0%, #f1dde1 50%, #e8ded2 100%);
+	}
+
+	.portrait img {
+		width: 100%;
+		aspect-ratio: 4 / 5;
+		object-fit: cover;
+	}
+
+	.portrait figcaption {
+		padding: 0.85rem 1rem;
+		font-size: 0.78rem;
+		letter-spacing: 0.1em;
+		color: var(--ink-muted);
+		text-align: center;
+		border-top: 1px solid var(--line);
+	}
+
+	.content-block + .content-block {
+		margin-top: 2.5rem;
+		padding-top: 2.5rem;
+		border-top: 1px solid var(--line);
+	}
+
+	.content-block h2 {
+		margin: 0 0 1rem;
+		font-family: 'Noto Serif TC', 'Yu Mincho', serif;
+		font-size: 1.35rem;
+		font-weight: 600;
+		letter-spacing: 0.06em;
+	}
+
+	.content-block p {
+		margin: 0 0 1rem;
+		color: var(--ink);
+		line-height: 1.85;
+	}
+
+	.content-block ul {
+		margin: 0;
+		padding-left: 1.25rem;
+		color: var(--ink-muted);
+		line-height: 1.85;
+	}
+
+	.content-block li + li {
+		margin-top: 0.35rem;
+	}
+
+	.contact-list {
+		margin: 0;
+		display: grid;
+		gap: 1rem;
+	}
+
+	.contact-list div {
+		display: grid;
+		grid-template-columns: 7rem 1fr;
+		gap: 0.75rem;
+		padding: 1rem 1.1rem;
+		background: #fff;
+		border: 1px solid var(--line);
+	}
+
+	.contact-list dt {
+		margin: 0;
+		font-size: 0.78rem;
+		letter-spacing: 0.12em;
+		color: var(--accent);
+	}
+
+	.contact-list dd {
+		margin: 0;
+		color: var(--ink);
+	}
+
+	.contact-list :global(.about-external-links a) {
+		color: var(--ink);
+		text-decoration: underline;
+		text-decoration-color: var(--accent-soft);
+		text-underline-offset: 3px;
+	}
+
+	.contact-list :global(.about-external-links a:hover) {
+		color: var(--accent);
+	}
+
+	@media (max-width: 760px) {
+		.about-layout {
+			grid-template-columns: 1fr;
+			gap: 1.75rem;
+		}
+
+		.page-hero {
+			margin-bottom: 2rem;
+			padding-bottom: 1.5rem;
+		}
+
+		.page-title {
+			font-size: clamp(1.65rem, 6vw, 2.25rem);
+		}
+
+		.contact-list div {
+			grid-template-columns: 1fr;
+			gap: 0.35rem;
+		}
+	}
+</style>
