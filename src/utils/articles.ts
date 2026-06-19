@@ -50,6 +50,15 @@ export function inferTopic(location?: string) {
 	return '';
 }
 
+export function isJapanArticle(article: CollectionEntry<'articles'>) {
+	const topic = inferTopic(article.data.location);
+	return topic === 'japan' || topic === '';
+}
+
+export function getJapanArticles(articles: CollectionEntry<'articles'>[]) {
+	return getPublishedArticles(articles).filter(isJapanArticle);
+}
+
 export function buildSearchText(data: CollectionEntry<'articles'>['data']) {
 	return [
 		data.title,
